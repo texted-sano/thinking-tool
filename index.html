@@ -9,13 +9,13 @@
 
 /* ===== デジタル教科書準拠の上品な配色テーマ ===== */
 :root {
-  --bg: #f5f2eb;            /* 温かみのある高級な紙の生成り色 */
+  --bg: #f5f2eb;
   --card: #ffffff;
   --border: #d0c8b8;
-  --accent: #a82020;        /* あかつき教育図書をイメージした深みのあるえんじ色 */
+  --accent: #a82020;
   --node-border: #a8a090;
   --head-fill: #e3ded5;
-  --text: #2a2520;          /* 視認性の高いシックな墨色 */
+  --text: #2a2520;
   --sub: #7a7060;
   --orange: #d35400;
   --green: #27ae60;
@@ -331,8 +331,12 @@ ruby rt {
   background: #c0392b;
 }
 
-.canvas-wrap { flex: 1; overflow: auto; position: relative; }
-#editor-canvas {
+.canvas-wrap { 
+  flex: 1; 
+  overflow: auto; 
+  position: relative; 
+  touch-action: none;
+}#editor-canvas {
   position: relative; 
   width: 3000px; 
   height: 2000px;
@@ -350,6 +354,7 @@ ruby rt {
 .node {
   position: absolute; cursor: pointer; user-select: none;
   display: flex; flex-direction: column;
+  touch-action: none;
 }
 .node-body {
   border: 2px solid var(--node-border);
@@ -1378,8 +1383,23 @@ buildLayout(tool) {
     document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
     document.addEventListener('mouseup', endDrag);
 
-    el.addEventListener('touchstart', e => { if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) { const t = e.touches[0]; startDrag(t.clientX, t.clientY); } }, {passive:true});
-    document.addEventListener('touchmove', e => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); }, {passive:true});
+    el.addEventListener('touchstart', e => {
+      if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) {
+        e.stopPropagation();
+        e.preventDefault();
+        const t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+      }
+    }, {passive: false});
+
+    document.addEventListener('touchmove', e => {
+      if (dragging) {
+        e.preventDefault();
+        const t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+      }
+    }, {passive: false});
+    
     document.addEventListener('touchend', endDrag);
   }
 
@@ -1455,15 +1475,19 @@ buildLayout(tool) {
 
     handle.addEventListener('touchstart', e => {
       e.stopPropagation();
+      e.preventDefault();
       const t = e.touches[0];
       startResize(t.clientX, t.clientY);
     }, {passive: false});
+
     document.addEventListener('touchmove', e => {
       if (resizing) {
+        e.preventDefault();
         const t = e.touches[0];
         moveResize(t.clientX, t.clientY);
       }
-    }, {passive: true});
+    }, {passive: false});
+
     document.addEventListener('touchend', endResize);
   }
 

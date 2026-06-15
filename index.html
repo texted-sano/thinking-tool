@@ -9,13 +9,13 @@
 
 /* ===== デジタル教科書準拠の上品な配色テーマ ===== */
 :root {
-  --bg: #f5f2eb;
+  --bg: #f5f2eb;            /* 温かみのある高級な紙の生成り色 */
   --card: #ffffff;
   --border: #d0c8b8;
-  --accent: #a82020;
+  --accent: #a82020;        /* あかつき教育図書をイメージした深みのあるえんじ色 */
   --node-border: #a8a090;
   --head-fill: #e3ded5;
-  --text: #2a2520;
+  --text: #2a2520;          /* 視認性の高いシックな墨色 */
   --sub: #7a7060;
   --orange: #d35400;
   --green: #27ae60;
@@ -1363,6 +1363,7 @@ buildLayout(tool) {
   // ============================================================
   makeDraggable(el, n) {
     let sx, sy, snx, sny, dragging = false, moved = false;
+    let lastTapTime = 0;
 
     const startDrag = (cx, cy) => {
       sx = cx; sy = cy; snx = n.x; sny = n.y;
@@ -1379,27 +1380,42 @@ buildLayout(tool) {
     };
     const endDrag = () => { dragging = false; };
 
-    el.addEventListener('mousedown', e => { if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) { startDrag(e.clientX, e.clientY); e.preventDefault(); } });
+    // マウスドラッグ操作（PC用）
+    el.addEventListener('mousedown', e => { 
+      if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) { 
+        startDrag(e.clientX, e.clientY); 
+        e.preventDefault(); 
+      } 
+    });
     document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
     document.addEventListener('mouseup', endDrag);
 
+    // タッチドラッグ操作 ＆ タップ判定（iPad用）
     el.addEventListener('touchstart', e => {
       if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) {
         e.stopPropagation();
-        e.preventDefault();
+        
         const t = e.touches[0];
         startDrag(t.clientX, t.clientY);
+
+        // --- iPad専用: タップおよびダブルタップの即時判定 ---
+        const now = Date.now();
+        const DOUBLE_TAP_DELAY = 300;
+        if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+          this.openTextModal(n.id);
+        } else {
+          this.selectNode(n.id);
+        }
+        lastTapTime = now;
       }
-    }, {passive: false});
+    }, {passive: true});
 
     document.addEventListener('touchmove', e => {
       if (dragging) {
-        e.preventDefault();
         const t = e.touches[0];
         moveDrag(t.clientX, t.clientY);
       }
-    }, {passive: false});
-    
+    }, {passive: true});
     document.addEventListener('touchend', endDrag);
   }
 

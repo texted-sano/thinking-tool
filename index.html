@@ -67,7 +67,6 @@ ruby rt {
   font-weight: 900;
   letter-spacing: 0.1em;
   color: var(--text);
-  border-bottom: 3px double var(--accent);
   padding-bottom: 12px;
 }
 .btn-new-wrap {
@@ -117,13 +116,7 @@ ruby rt {
   align-items: flex-end;
   gap: 8px;
 }
-.saved-title::before {
-  content: "";
-  display: inline-block;
-  width: 4px;
-  height: 18px;
-  background: var(--accent);
-}
+
 .saved-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -232,7 +225,7 @@ ruby rt {
 .tool-card-icon svg { opacity: 0.65; }
 .tool-card-name { font-size: 0.88rem; font-weight: 700; line-height: 1.4; }
 
-/* ===== EDITOR (上部集約・焦茶ベゼル風ヘッダー) ===== */
+/* ===== EDITOR ===== */
 #editor-screen {
   display: none; flex-direction: column;
   height: 100vh; position: fixed; inset: 0;
@@ -274,7 +267,7 @@ ruby rt {
   gap: 6px;
 }
 
-/* ツールバー用ボタン） */
+/* ツールバー用ボタン */
 .toolbar-btn {
   background: rgba(255,255,255,0.08);
   border: 1.5px solid rgba(255,255,255,0.15);
@@ -335,7 +328,8 @@ ruby rt {
   overflow: auto; 
   position: relative; 
   touch-action: none;
-}#editor-canvas {
+}
+#editor-canvas {
   position: relative; 
   width: 3000px; 
   height: 2000px;
@@ -349,7 +343,7 @@ ruby rt {
   position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%;
 }
 
-/* ===== NODES (学習ノート調カードデザイン) ===== */
+/* ===== NODES ===== */
 .node {
   position: absolute; cursor: pointer; user-select: none;
   display: flex; flex-direction: column;
@@ -370,7 +364,6 @@ ruby rt {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(168,32,32,0.22), 0 4px 14px var(--shadow);
 }
-/* center circle (webbing / mindmap) */
 .node.type-center .node-body {
   border-radius: 50%;
   font-weight: 800; font-size: 1rem;
@@ -379,7 +372,6 @@ ruby rt {
   border-style: double; border-width: 4px;
 }
 
-/* jellyfish dome */
 .node.type-jellyfish-dome > .node-body {
   border-radius: 110px 110px 14px 14px;
   background: #e6e0d5;
@@ -388,6 +380,14 @@ ruby rt {
   font-weight: 800;
   justify-content: center; text-align: center;
   border-style: double; border-width: 4px;
+}
+
+/* ===== STICKY NOTE (フセン) ===== */
+.node.type-sticky > .node-body {
+  border-radius: 0 !important;
+  box-shadow: 3px 6px 12px rgba(42,37,32,0.08) !important;
+  font-weight: 700;
+  position: relative;
 }
 
 /* ===== RESIZER HANDLES ===== */
@@ -476,7 +476,7 @@ ruby rt {
 <!-- ===== HOME ===== -->
 <div id="home-screen">
   <div class="home-header">
-    <h1 class="home-title"><ruby>情<rt>じょう</rt>報<rt>ほう</rt>整<rt>せい</rt>理<rt>り</rt></ruby>ツール</h1>
+    <h1 class="home-title"><ruby>情<rt>じょう</rt>報<rt>ほう</rt></ruby><ruby>整<rt>せい</rt>理<rt>り</rt></ruby>ツール</h1>
   </div>
   
   <div class="btn-new-wrap">
@@ -560,52 +560,39 @@ ruby rt {
 <div id="editor-screen">
   
   <div class="editor-toolbar">
-    <!-- タイトル編集部 -->
     <div class="editor-title-container">
       <input id="editor-title" class="editor-title-input" value="無題" oninput="scheduleAutoSave()"/>
     </div>
 
-    <!-- 統合アクション群 -->
     <div class="toolbar-actions">
-      <!-- 戻る (Undo) -->
       <button class="toolbar-btn" id="btn-undo" onclick="undo()" disabled>
-        <span class="btn-symbol">◀</span>
         <span class="btn-text"><ruby>戻<rt>もど</rt></ruby>る</span>
       </button>
-      <!-- 進む (Redo) -->
       <button class="toolbar-btn" id="btn-redo" onclick="redo()" disabled>
-        <span class="btn-symbol">▶</span>
         <span class="btn-text"><ruby>進<rt>すす</rt></ruby>む</span>
       </button>
-      <!-- 拡大 -->
       <button class="toolbar-btn" onclick="changeZoom(+0.15)">
-        <span class="btn-symbol">＋</span>
         <span class="btn-text"><ruby>拡<rt>かく</rt>大<rt>だい</rt></ruby></span>
       </button>
-      <!-- もどす -->
       <button class="toolbar-btn" onclick="resetZoom()">
-        <span class="btn-symbol">⟲</span>
         <span class="btn-text"><ruby>戻<rt>もど</rt></ruby>す</span>
       </button>
-      <!-- 縮小 -->
       <button class="toolbar-btn" onclick="changeZoom(-0.15)">
-        <span class="btn-symbol">－</span>
         <span class="btn-text"><ruby>縮<rt>しゅく</rt>小<rt>しょう</rt></ruby></span>
       </button>
-      <!-- 記録 -->
+      <button class="toolbar-btn" onclick="addStickyNote()">
+        <span class="btn-text"><ruby>付<rt>ふ</rt>箋<rt>せん</rt></ruby></span>
+      </button>
       <button class="toolbar-btn" onclick="manualSave()">
-        <span class="btn-symbol">▼</span>
         <span class="btn-text"><ruby>記<rt>き</rt>録<rt>ろく</rt></ruby></span>
       </button>
     </div>
 
-    <!-- おわる -->
     <button class="close-editor-btn" onclick="closeEditor()">
       <span>おわる</span>
     </button>
   </div>
 
-  <!-- キャンバス領域 -->
   <div class="canvas-wrap" id="canvas-wrap">
     <div id="editor-canvas">
       <svg id="lines-svg" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -625,11 +612,11 @@ ruby rt {
       </div>
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>大<rt>おお</rt></ruby>きさ</span>
+      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>大<rt>おお</rt>きさ</span>
       <input type="range" class="fsize-slider" id="font-size-slider" min="10" max="28" value="14">
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>太<rt>ふと</rt></ruby>さ</span>
+      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>太<rt>ふと</rt>さ</span>
       <div class="toggle-grp">
         <button class="tog-btn active" id="weight-normal" onclick="setWeight('normal')">ふつう</button>
         <button class="tog-btn" id="weight-bold" onclick="setWeight('bold')"><ruby>太<rt>ふと</rt>字<rt>じ</rt></ruby></button>
@@ -696,7 +683,6 @@ class ThinkingToolApp {
     this.init();
   }
 
-  // 初期セットアップ
   init() {
     this.renderPalettes();
     this.renderSaved();
@@ -704,7 +690,6 @@ class ThinkingToolApp {
     this.setupBackgroundPan();
   }
 
-  // ID生成ヘルパー
   uid() {
     return 'n' + (this.idCounter++);
   }
@@ -826,11 +811,9 @@ class ThinkingToolApp {
     grid.innerHTML = arr.map(p => `
       <div class="saved-card" onclick="loadProject('${p.id}')">
         <div class="saved-card-label">${this.esc(p.title)}</div>
-        <!-- 更新 ➜ 更・新 にモノルビ化 -->
         <div class="saved-card-date">${this.esc(p.date)}<ruby>更<rt>こう</rt>新<rt>しん</rt></ruby></div>
         <div class="saved-card-thumb">
           ${this.thumbIcon(p.tool)}
-          <!-- 削除 ➜ 削・除 にモノルビ化 -->
           <button class="saved-card-del" onclick="event.stopPropagation();deleteProject('${p.id}')"><ruby>削<rt>さく</rt>除<rt>じょ</rt></ruby></button>
         </div>
       </div>`).join('');
@@ -906,11 +889,12 @@ class ThinkingToolApp {
     return { webbing: 'ウェビングマップ', mindmap: 'マインドマップ', jellyfish: 'クラゲチャート' }[t] || t;
   }
 
-// ============================================================
+  // ============================================================
   // CANVAS LAYOUT GENERATORS
   // ============================================================
-buildLayout(tool) {
-    const cx = 900, cy = 700;
+  buildLayout(tool) {
+    const cx = USER_SETTINGS.CANVAS_WIDTH / 2;
+    const cy = USER_SETTINGS.CANVAS_HEIGHT / 2;
     if (tool === 'webbing') {
       const center = this.mk(cx - 60, cy - 60, '', 'center');
       this.rootNodeIds.add(center.id);
@@ -1070,11 +1054,11 @@ buildLayout(tool) {
 
   makeNodeEl(n) {
     const wrap = document.createElement('div');
-    wrap.className = 'node' + (n.type === 'center' ? ' type-center' : '') + (n.type === 'jellyfish-dome' ? ' type-jellyfish-dome' : '');
+    wrap.className = 'node' + (n.type ? ` type-${n.type}` : '');
     wrap.id = 'node-' + n.id;
-    wrap.style.cssText = `left:${n.x}px;top:${n.y}px;position:absolute;width:${n.width}px;min-height:${n.height}px;`;
+    const heightProp = n.dir === 'tate' ? `height:${n.height}px;` : `min-height:${n.height}px;`;
+    wrap.style.cssText = `left:${n.x}px;top:${n.y}px;position:absolute;width:${n.width}px;${heightProp}`;
 
-    // Body
     const body = document.createElement('div');
     body.className = 'node-body';
     body.style.width = '100%';
@@ -1207,19 +1191,17 @@ buildLayout(tool) {
       let d = '';
 
       if (e.curveness === 0) {
-        // 直線パス
         d = `M ${fc.x} ${fc.y} L ${tc.x} ${tc.y}`;
       } else {
-        // 二次ベジェ曲線パス（中点から法線方向に curveness オフセットした制御点を計算）
         const mx = (fc.x + tc.x) / 2;
         const my = (fc.y + tc.y) / 2;
         const dx = tc.x - fc.x;
         const dy = tc.y - fc.y;
         const len = Math.sqrt(dx * dx + dy * dy) || 1;
-        const nx = -dy / len; // 垂直法線ベクトル
+        const nx = -dy / len;
         const ny = dx / len;
-        const cx = mx + nx * e.curveness; // 制御点のX座標
-        const cy = my + ny * e.curveness; // 制御点のY座標
+        const cx = mx + nx * e.curveness;
+        const cy = my + ny * e.curveness;
         d = `M ${fc.x} ${fc.y} Q ${cx} ${cy} ${tc.x} ${tc.y}`;
       }
 
@@ -1231,10 +1213,11 @@ buildLayout(tool) {
 
       const hitPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       hitPath.setAttribute('d', d);
-      hitPath.setAttribute('stroke', 'transparent');
-      hitPath.setAttribute('stroke-width', '16');
+      hitPath.setAttribute('stroke', 'rgba(0, 0, 0, 0.001)');
+      hitPath.setAttribute('stroke-width', '32');
       hitPath.setAttribute('fill', 'none');
       hitPath.style.cursor = 'ns-resize';
+      hitPath.style.pointerEvents = 'stroke';
 
       g.appendChild(visualPath);
       g.appendChild(hitPath);
@@ -1246,6 +1229,36 @@ buildLayout(tool) {
 
   makeLineBendable(pathEl, edge, fc, tc) {
     let dragging = false;
+
+    const onMouseMove = e => {
+      if (dragging) onMove(e.clientX, e.clientY);
+    };
+
+    const onMouseUp = () => {
+      if (dragging) {
+        dragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        this.scheduleAutoSave();
+      }
+    };
+
+    const onTouchMove = e => {
+      if (dragging) {
+        const t = e.touches[0];
+        onMove(t.clientX, t.clientY);
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (dragging) {
+        dragging = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        this.scheduleAutoSave();
+      }
+    };
 
     const onStart = () => {
       dragging = true;
@@ -1277,33 +1290,20 @@ buildLayout(tool) {
       this.drawLines();
     };
 
-    const onEnd = () => {
-      if (dragging) {
-        dragging = false;
-        this.scheduleAutoSave();
-      }
-    };
-
     pathEl.addEventListener('mousedown', e => {
       e.stopPropagation();
       onStart();
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
     });
-    document.addEventListener('mousemove', e => {
-      if (dragging) onMove(e.clientX, e.clientY);
-    });
-    document.addEventListener('mouseup', onEnd);
 
     pathEl.addEventListener('touchstart', e => {
       e.stopPropagation();
       onStart();
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+      if (e.cancelable) e.preventDefault();
     }, { passive: false });
-    document.addEventListener('touchmove', e => {
-      if (dragging) {
-        const t = e.touches[0];
-        onMove(t.clientX, t.clientY);
-      }
-    }, { passive: true });
-    document.addEventListener('touchend', onEnd);
   }
 
   // ============================================================
@@ -1323,6 +1323,30 @@ buildLayout(tool) {
         document.querySelectorAll('.node').forEach(el => el.classList.remove('selected'));
       }
     });
+  }
+
+addStickyNote() {
+    this.snapshot();
+    const wrap = document.getElementById('canvas-wrap');
+    const scrollLeft = wrap ? wrap.scrollLeft : 0;
+    const scrollTop = wrap ? wrap.scrollTop : 0;
+    const width = wrap ? wrap.clientWidth : 800;
+    const height = wrap ? wrap.clientHeight : 600;
+
+    const cx = (scrollLeft + width / 2) / this.zoomLevel - 75;
+    const cy = (scrollTop + height / 2) / this.zoomLevel - 50;
+
+    const sticky = this.mk(cx, cy, '', 'sticky');
+    sticky.width = 150;
+    sticky.height = 100;
+    
+    const bgColors = USER_SETTINGS.PALETTE_BG_COLORS;
+    sticky.bg = bgColors[bgColors.length - 1];
+
+    const canvas = document.getElementById('editor-canvas');
+    canvas.appendChild(this.makeNodeEl(sticky));
+    this.selectNode(sticky.id);
+    this.scheduleAutoSave();
   }
 
   addChild(parentId) {
@@ -1358,38 +1382,66 @@ buildLayout(tool) {
   }
 
   // ============================================================
-  // DRAGGABLE CONTROLLER (枠以外の部分をつかんだときのドラッグ)
+  // DRAGGABLE CONTROLLER
   // ============================================================
   makeDraggable(el, n) {
     let sx, sy, snx, sny, dragging = false, moved = false;
     let lastTapTime = 0;
 
-    const startDrag = (cx, cy) => {
-      sx = cx; sy = cy; snx = n.x; sny = n.y;
-      dragging = true; moved = false;
-    };
-    const moveDrag = (cx, cy) => {
+    const onMouseMove = e => {
       if (!dragging) return;
-      const dx = (cx - sx) / this.zoomLevel;
-      const dy = (cy - sy) / this.zoomLevel;
+      const dx = (e.clientX - sx) / this.zoomLevel;
+      const dy = (e.clientY - sy) / this.zoomLevel;
       if (!moved && Math.abs(dx) + Math.abs(dy) > 3) { this.snapshot(); moved = true; }
       n.x = snx + dx; n.y = sny + dy;
       el.style.left = n.x + 'px'; el.style.top = n.y + 'px';
       this.drawLines();
     };
-    const endDrag = () => { dragging = false; };
 
-    // マウスドラッグ操作（PC用）
+    const onMouseUp = () => {
+      if (dragging) {
+        dragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        if (moved) this.scheduleAutoSave();
+      }
+    };
+
+    const onTouchMove = e => {
+      if (!dragging) return;
+      const t = e.touches[0];
+      const dx = (t.clientX - sx) / this.zoomLevel;
+      const dy = (t.clientY - sy) / this.zoomLevel;
+      if (!moved && Math.abs(dx) + Math.abs(dy) > 3) { this.snapshot(); moved = true; }
+      n.x = snx + dx; n.y = sny + dy;
+      el.style.left = n.x + 'px'; el.style.top = n.y + 'px';
+      this.drawLines();
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onTouchEnd = () => {
+      if (dragging) {
+        dragging = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        if (moved) this.scheduleAutoSave();
+      }
+    };
+
+    const startDrag = (cx, cy) => {
+      sx = cx; sy = cy; snx = n.x; sny = n.y;
+      dragging = true; moved = false;
+    };
+
     el.addEventListener('mousedown', e => { 
       if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) { 
         startDrag(e.clientX, e.clientY); 
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
         e.preventDefault(); 
       } 
     });
-    document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-    document.addEventListener('mouseup', endDrag);
 
-    // タッチドラッグ操作 ＆ タップ判定（iPad用）
     el.addEventListener('touchstart', e => {
       if (e.target.tagName !== 'BUTTON' && !e.target.classList.contains('resizer')) {
         e.stopPropagation();
@@ -1397,7 +1449,9 @@ buildLayout(tool) {
         const t = e.touches[0];
         startDrag(t.clientX, t.clientY);
 
-        // --- iPad専用: タップおよびダブルタップの即時判定 ---
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+
         const now = Date.now();
         const DOUBLE_TAP_DELAY = 300;
         if (now - lastTapTime < DOUBLE_TAP_DELAY) {
@@ -1407,22 +1461,48 @@ buildLayout(tool) {
         }
         lastTapTime = now;
       }
-    }, {passive: true});
-
-    document.addEventListener('touchmove', e => {
-      if (dragging) {
-        const t = e.touches[0];
-        moveDrag(t.clientX, t.clientY);
-      }
-    }, {passive: true});
-    document.addEventListener('touchend', endDrag);
+    }, { passive: true });
   }
 
   // ============================================================
-  // RESIZABLE CONTROLLER (上下左右の4辺および右下枠ドラッグ)
+  // RESIZABLE CONTROLLER
   // ============================================================
   makeResizable(el, handle, n, type) {
     let sx, sy, sw, sh, snx, sny, resizing = false, resized = false;
+
+    const onMouseMove = e => {
+      if (!resizing) return;
+      const dx = (e.clientX - sx) / this.zoomLevel;
+      const dy = (e.clientY - sy) / this.zoomLevel;
+      applyResize(dx, dy);
+    };
+
+    const onMouseUp = () => {
+      if (resizing) {
+        resizing = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        if (resized) this.scheduleAutoSave();
+      }
+    };
+
+    const onTouchMove = e => {
+      if (!resizing) return;
+      const t = e.touches[0];
+      const dx = (t.clientX - sx) / this.zoomLevel;
+      const dy = (t.clientY - sy) / this.zoomLevel;
+      applyResize(dx, dy);
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onTouchEnd = () => {
+      if (resizing) {
+        resizing = false;
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        if (resized) this.scheduleAutoSave();
+      }
+    };
 
     const startResize = (cx, cy) => {
       sx = cx;
@@ -1434,11 +1514,8 @@ buildLayout(tool) {
       resizing = true;
       resized = false;
     };
-    const moveResize = (cx, cy) => {
-      if (!resizing) return;
-      const dx = (cx - sx) / this.zoomLevel;
-      const dy = (cy - sy) / this.zoomLevel;
 
+    const applyResize = (dx, dy) => {
       if (!resized && (Math.abs(dx) > 1 || Math.abs(dy) > 1)) {
         this.snapshot();
         resized = true;
@@ -1471,39 +1548,23 @@ buildLayout(tool) {
       el.style.top = n.y + 'px';
       this.drawLines();
     };
-    const endResize = () => {
-      if (resizing) {
-        resizing = false;
-        if (resized) {
-          this.scheduleAutoSave();
-        }
-      }
-    };
 
     handle.addEventListener('mousedown', e => {
       e.stopPropagation();
       e.preventDefault();
       startResize(e.clientX, e.clientY);
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
     });
-    document.addEventListener('mousemove', e => { if (resizing) moveResize(e.clientX, e.clientY); });
-    document.addEventListener('mouseup', endResize);
 
     handle.addEventListener('touchstart', e => {
       e.stopPropagation();
       e.preventDefault();
       const t = e.touches[0];
       startResize(t.clientX, t.clientY);
-    }, {passive: false});
-
-    document.addEventListener('touchmove', e => {
-      if (resizing) {
-        e.preventDefault();
-        const t = e.touches[0];
-        moveResize(t.clientX, t.clientY);
-      }
-    }, {passive: false});
-
-    document.addEventListener('touchend', endResize);
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    }, { passive: false });
   }
 
   // ============================================================
@@ -1558,7 +1619,12 @@ buildLayout(tool) {
     }
 
     const n = this.nodes.find(x => x.id === this.editingId);
-    if (n) n.dir = d;
+    if (n && n.dir !== d) {
+      const temp = n.width;
+      n.width = n.height;
+      n.height = temp;
+      n.dir = d;
+    }
   }
 
   setWeight(w) {
@@ -1623,6 +1689,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.setWeight = (w) => app.setWeight(w);
   window.selectPaletteColor = (type, color) => app.selectPaletteColor(type, color);
   window.scheduleAutoSave = () => app.scheduleAutoSave();
+  window.closeEditor = () => app.closeEditor();
+  window.addStickyNote = () => app.addStickyNote(); // 追加
+  window.confirmNodeText = () => app.confirmNodeText();
 });
 </script>
 </body>

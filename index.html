@@ -26,7 +26,7 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* ===== RUBY FIX ===== */
@@ -219,6 +219,65 @@ ruby rt {
   background: #fdfcf9;
   border-color: var(--accent);
   box-shadow: 0 6px 20px rgba(168,32,32,0.15); /* 浮き上がりを示す影を追加 */
+}
+
+/* ===== NEW TOOL INLINE SECTION ===== */
+.new-tool-section {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 28px 32px 24px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 6px 18px var(--shadow);
+  margin-bottom: 20px;
+}
+.new-tool-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.new-tool-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.new-tool-card {
+  flex: 1;
+  min-width: 160px;
+  max-width: 240px;
+  cursor: pointer;
+  background: #faf8f4;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 12px 16px;
+  text-align: center;
+  transition: border-color 0.14s, background 0.14s, box-shadow 0.14s, transform 0.12s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.new-tool-card:hover {
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(168,32,32,0.12);
+  transform: translateY(-2px);
+}
+.new-tool-icon {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.new-tool-icon svg { opacity: 0.9; }
+.new-tool-name {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.4;
 }
 
 /* ===== TOOL SELECT MODAL ===== */
@@ -555,36 +614,15 @@ ruby rt {
   <div class="home-header">
     <h1 class="home-title">シンキングツール</h1>
   </div>
-  
-  <div class="btn-new-wrap">
-    <button class="btn-new" onclick="openToolSelect()">
-      <span>あたらしく つくる</span>
-      <span class="btn-new-plus">＋</span>
-    </button>
-  </div>
 
-  <div class="saved-section">
-    <div class="saved-title">
-      いままで に つくったもの
-    </div>
-    <div id="saved-grid" class="saved-grid"></div>
-  </div>
-</div>
+  <!-- ツール選択（インライン） -->
+  <div class="new-tool-section">
+    <div class="new-tool-title">あたらしく つくる</div>
+    <div class="new-tool-grid">
 
-<!-- ===== TOOL SELECT MODAL ===== -->
-<div class="modal-overlay" id="tool-modal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeToolSelect()">とじる</button>
-    <div class="modal-title">
-      ツール を せんたく してください
-    </div>
-    <div class="tool-grid">
-
-      <!-- ウェビングマップ（モーダル） -->
-      <div class="tool-card" onclick="createNew('webbing')">
-        <div class="tool-card-icon">
+      <div class="new-tool-card" onclick="createNew('webbing')">
+        <div class="new-tool-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <!-- 線をより濃くはっきりした#333に変更 -->
             <circle cx="50" cy="38" r="14" fill="none" stroke="#333" stroke-width="2.5"/>
             <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
             <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
@@ -596,14 +634,12 @@ ruby rt {
             <line x1="64" y1="46" x2="76" y2="67" stroke="#333" stroke-width="1.5"/>
           </svg>
         </div>
-        <div class="tool-card-name">タイヨウ マップ</div>
+        <div class="new-tool-name">タイヨウ マップ</div>
       </div>
 
-      <!-- マインドマップ（モーダル） -->
-      <div class="tool-card" onclick="createNew('mindmap')">
-        <div class="tool-card-icon">
+      <div class="new-tool-card" onclick="createNew('mindmap')">
+        <div class="new-tool-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <!-- 線をより濃くはっきりした#333に変更 -->
             <circle cx="28" cy="38" r="16" fill="none" stroke="#333" stroke-width="2.5"/>
             <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
             <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
@@ -615,14 +651,12 @@ ruby rt {
             <line x1="44" y1="46" x2="54" y2="66" stroke="#333" stroke-width="1.5"/>
           </svg>
         </div>
-        <div class="tool-card-name">ハリネズミ マップ</div>
+        <div class="new-tool-name">ハリネズミ マップ</div>
       </div>
 
-      <!-- クラゲチャート（モーダル） -->
-      <div class="tool-card" onclick="createNew('jellyfish')">
-        <div class="tool-card-icon">
+      <div class="new-tool-card" onclick="createNew('jellyfish')">
+        <div class="new-tool-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <!-- クラゲドームの塗りを濃いアースカラー#8a7e6dに、線を#333に変更 -->
             <path d="M10,42 Q50,4 90,42" fill="#8a7e6d" stroke="#333" stroke-width="2"/>
             <line x1="22" y1="42" x2="16" y2="66" stroke="#333" stroke-width="2"/>
             <line x1="50" y1="42" x2="50" y2="66" stroke="#333" stroke-width="2"/>
@@ -632,10 +666,17 @@ ruby rt {
             <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
           </svg>
         </div>
-        <div class="tool-card-name">クラゲ マップ</div>
+        <div class="new-tool-name">クラゲ マップ</div>
       </div>
 
     </div>
+  </div>
+
+  <div class="saved-section">
+    <div class="saved-title">
+      いままで に つくったもの
+    </div>
+    <div id="saved-grid" class="saved-grid"></div>
   </div>
 </div>
 
@@ -1071,7 +1112,6 @@ class ThinkingToolApp {
   }
 
   createNew(tool) {
-    this.closeToolSelect();
     this.currentTool   = tool;
     this.currentProjId = 'proj_' + Date.now();
     this.nodes = [];

@@ -51,233 +51,195 @@ ruby rt {
   color: #fff;
 }
 
-/* ===== SHIN-HOME ===== */
+/* ===== HOME ===== */
 #home-screen {
-  max-width: 960px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 56px 32px 64px;
 }
-.home-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+
+/* タイトル */
 .home-title {
-  display: inline-block;
   font-size: 2rem;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text);
-  padding-bottom: 12px;
+  text-align: center;
+  margin-bottom: 52px;
 }
-.btn-new-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
+
+/* ===== あたらしくつくる ===== */
+.new-tool-section {
+  margin-bottom: 64px;
 }
-.btn-new {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--card);
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  border-radius: 8px;
-  padding: 12px 32px;
+.new-tool-label {
   font-size: 1.25rem;
   font-weight: 900;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-.btn-new:hover {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(168,32,32,0.22);
-}
-.btn-new-plus {
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-/* ノート一覧セクション（横長リスト型レイアウト） */
-.saved-section {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 32px;
-  border: 1.5px solid var(--border);
-  box-shadow: 0 6px 18px var(--shadow);
-}
-.saved-title {
-  font-size: 1.05rem;
-  font-weight: 900;
-  margin-bottom: 24px;
-  color: var(--sub);
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.saved-grid {
-  display: flex;
-  flex-direction: column; /* 1行ずつ下に増やしていくための縦並び設定 */
-  gap: 12px; /* 箇条書きカード間の縦のすき間 */
-}
-.saved-card {
-  background: #fdfcf9;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 16px; /* 横長に適した細い内側余白に変更 */
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
-  display: flex;
-  flex-direction: row; /* 横に並べる設定 */
-  align-items: center; /* 縦方向を中央揃えにする */
-  gap: 16px; /* 各要素間のすき間 */
-}
-.saved-card:hover {
-  border-color: var(--accent);
-  transform: translateX(3px); /* 縦揺れではなく、右側にスライドするような上品なアニメーションへ */
-  box-shadow: 0 4px 12px rgba(42,37,32,0.06);
-}
-.saved-card-label {
-  font-size: 1.0rem;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.4;
-  word-break: break-all;
-  flex: 1; /* 名前（タイトル）エリアが伸縮し、日付と削除ボタンを右端に配置します */
-}
-.saved-card-date {
-  font-size: 0.8rem;
-  color: var(--sub);
-  white-space: nowrap; /* 画面幅が狭くても日付が途中で折り返さないようにする */
-}
-.saved-card-thumb {
-  background: #f5f2eb;
-  border: 1px dashed var(--border);
-  border-radius: 6px;
-  width: 48px; /* 横長に合わせてアイコンの枠をコンパクトな正方形に調整 */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0; /* アイコンが潰れるのを防止 */
-}
-.saved-card-thumb svg {
-  opacity: 0.85; /* 視認性を上げるために、さらにくっきりと不透明度をアップ */
-  width: 32px;
-  height: 27px;
-}
-
-.saved-card-del {
-  background: #ffffff;
-  border: 1.5px solid var(--accent);
-  border-radius: 6px;
-  cursor: pointer;
+  letter-spacing: 0.06em;
   color: var(--accent);
-  font-size: 0.8rem;
-  font-weight: 800;
-  padding: 6px 14px; /* 「さくじょ」を押しやすい幅に広げる */
-  transition: all 0.12s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0; /* 削除ボタンが潰れるのを防止 */
-}
-.saved-card-del:hover {
-  color: #fff;
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.empty-saved { color: var(--sub); font-size: 0.9rem; padding: 8px 0; }
-
-/* ===== ドラッグソート用スタイル ===== */
-.saved-card-drag-handle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab; /* 掴めることを示すカーソル */
-  font-size: 1.1rem;
-  color: var(--sub);
-  width: 28px;
-  height: 100%;
-  user-select: none;
-  opacity: 0.5;
-  transition: opacity 0.12s, transform 0.12s;
-}
-.saved-card-drag-handle:hover {
-  opacity: 1;
-  transform: scale(1.15);
-}
-.saved-card-drag-handle:active {
-  cursor: grabbing; /* 掴み中カーソル */
-}
-
-/* ドラッグ中の要素のビジュアル */
-.saved-card.dragging {
-  opacity: 0.75;
-  background: #fdfcf9;
-  border-color: var(--accent);
-  box-shadow: 0 6px 20px rgba(168,32,32,0.15); /* 浮き上がりを示す影を追加 */
-}
-
-/* ===== NEW TOOL INLINE SECTION ===== */
-.new-tool-section {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 28px 32px 24px;
-  border: 1.5px solid var(--border);
-  box-shadow: 0 6px 18px var(--shadow);
+  text-align: center;
   margin-bottom: 20px;
 }
-.new-tool-title {
-  font-size: 1.15rem;
-  font-weight: 900;
-  color: var(--accent);
-  letter-spacing: 0.06em;
-  text-align: center;
-  margin-bottom: 18px;
-}
 .new-tool-grid {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 .new-tool-card {
-  flex: 1;
-  min-width: 160px;
-  max-width: 240px;
   cursor: pointer;
-  background: #faf8f4;
+  background: var(--card);
   border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 20px 12px 16px;
+  border-radius: 12px;
+  padding: 28px 16px 22px;
   text-align: center;
-  transition: border-color 0.14s, background 0.14s, box-shadow 0.14s, transform 0.12s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.new-tool-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
 }
 .new-tool-card:hover {
-  border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 4px 16px rgba(168,32,32,0.12);
-  transform: translateY(-2px);
+  background: #fffdf9;
+  border-color: transparent;
+}
+.new-tool-card:hover::after {
+  opacity: 1;
 }
 .new-tool-icon {
-  height: 76px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.new-tool-icon svg { opacity: 0.9; }
+.new-tool-icon svg { opacity: 0.8; transition: opacity 0.15s; }
+.new-tool-card:hover .new-tool-icon svg { opacity: 1; }
 .new-tool-name {
-  font-size: 0.92rem;
-  font-weight: 900;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: var(--text);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* ===== いままでにつくったもの ===== */
+.saved-section { }
+.saved-label {
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+/* 区切り線 */
+.saved-divider {
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 20px;
+}
+.saved-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.saved-card {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  transition: background 0.12s;
+}
+.saved-card:first-child {
+  border-top: 1px solid var(--border);
+}
+.saved-card:hover {
+  background: rgba(168,32,32,0.03);
+}
+.saved-card-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.saved-card-thumb svg {
+  width: 26px;
+  height: 22px;
+  opacity: 0.7;
+}
+.saved-card-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+  word-break: break-all;
   line-height: 1.4;
+}
+.saved-card-date {
+  font-size: 0.75rem;
+  color: var(--sub);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.saved-card-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sub);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 4px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.12s, background 0.12s;
+}
+.saved-card-del:hover {
+  color: var(--accent);
+  background: rgba(168,32,32,0.06);
+}
+.empty-saved {
+  font-size: 0.88rem;
+  color: var(--sub);
+  padding: 24px 0;
+  text-align: center;
+}
+
+/* ドラッグハンドル */
+.saved-card-drag-handle {
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  color: var(--border);
+  font-size: 1rem;
+  width: 20px;
+  user-select: none;
+  flex-shrink: 0;
+  transition: color 0.12s;
+}
+.saved-card-drag-handle:hover { color: var(--sub); }
+.saved-card-drag-handle:active { cursor: grabbing; }
+.saved-card.dragging {
+  opacity: 0.5;
+  background: var(--bg);
 }
 
 /* ===== TOOL SELECT MODAL ===== */
@@ -611,27 +573,26 @@ ruby rt {
 
 <!-- ===== HOME ===== -->
 <div id="home-screen">
-  <div class="home-header">
-    <h1 class="home-title">シンキングツール</h1>
-  </div>
 
-  <!-- ツール選択（インライン） -->
+  <h1 class="home-title">シンキングツール</h1>
+
+  <!-- あたらしくつくる -->
   <div class="new-tool-section">
-    <div class="new-tool-title">あたらしく つくる</div>
+    <div class="new-tool-label">あたらしくつくる</div>
     <div class="new-tool-grid">
 
       <div class="new-tool-card" onclick="createNew('webbing')">
         <div class="new-tool-icon">
-          <svg width="100" height="76" viewBox="0 0 100 76">
-            <circle cx="50" cy="38" r="14" fill="none" stroke="#333" stroke-width="2.5"/>
-            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
-            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
-            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
-            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
-            <line x1="36" y1="30" x2="24" y2="9"  stroke="#333" stroke-width="1.5"/>
-            <line x1="64" y1="30" x2="76" y2="9"  stroke="#333" stroke-width="1.5"/>
-            <line x1="36" y1="46" x2="24" y2="67" stroke="#333" stroke-width="1.5"/>
-            <line x1="64" y1="46" x2="76" y2="67" stroke="#333" stroke-width="1.5"/>
+          <svg width="80" height="62" viewBox="0 0 100 76">
+            <circle cx="50" cy="38" r="14" fill="none" stroke="#2a2520" stroke-width="2.5"/>
+            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
+            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
+            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
+            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
+            <line x1="36" y1="30" x2="24" y2="9"  stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="64" y1="30" x2="76" y2="9"  stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="36" y1="46" x2="24" y2="67" stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="64" y1="46" x2="76" y2="67" stroke="#7a7060" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="new-tool-name">タイヨウ マップ</div>
@@ -639,16 +600,16 @@ ruby rt {
 
       <div class="new-tool-card" onclick="createNew('mindmap')">
         <div class="new-tool-icon">
-          <svg width="100" height="76" viewBox="0 0 100 76">
-            <circle cx="28" cy="38" r="16" fill="none" stroke="#333" stroke-width="2.5"/>
-            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <line x1="44" y1="30" x2="54" y2="12" stroke="#333" stroke-width="1.5"/>
-            <line x1="44" y1="35" x2="54" y2="30" stroke="#333" stroke-width="1.5"/>
-            <line x1="44" y1="41" x2="54" y2="48" stroke="#333" stroke-width="1.5"/>
-            <line x1="44" y1="46" x2="54" y2="66" stroke="#333" stroke-width="1.5"/>
+          <svg width="80" height="62" viewBox="0 0 100 76">
+            <circle cx="28" cy="38" r="16" fill="none" stroke="#2a2520" stroke-width="2.5"/>
+            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <line x1="44" y1="30" x2="54" y2="12" stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="44" y1="35" x2="54" y2="30" stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="44" y1="41" x2="54" y2="48" stroke="#7a7060" stroke-width="1.5"/>
+            <line x1="44" y1="46" x2="54" y2="66" stroke="#7a7060" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="new-tool-name">ハリネズミ マップ</div>
@@ -656,14 +617,14 @@ ruby rt {
 
       <div class="new-tool-card" onclick="createNew('jellyfish')">
         <div class="new-tool-icon">
-          <svg width="100" height="76" viewBox="0 0 100 76">
-            <path d="M10,42 Q50,4 90,42" fill="#8a7e6d" stroke="#333" stroke-width="2"/>
-            <line x1="22" y1="42" x2="16" y2="66" stroke="#333" stroke-width="2"/>
-            <line x1="50" y1="42" x2="50" y2="66" stroke="#333" stroke-width="2"/>
-            <line x1="78" y1="42" x2="84" y2="66" stroke="#333" stroke-width="2"/>
-            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
-            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+          <svg width="80" height="62" viewBox="0 0 100 76">
+            <path d="M10,42 Q50,4 90,42" fill="#c4b9a8" stroke="#2a2520" stroke-width="2"/>
+            <line x1="22" y1="42" x2="16" y2="66" stroke="#7a7060" stroke-width="2"/>
+            <line x1="50" y1="42" x2="50" y2="66" stroke="#7a7060" stroke-width="2"/>
+            <line x1="78" y1="42" x2="84" y2="66" stroke="#7a7060" stroke-width="2"/>
+            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
           </svg>
         </div>
         <div class="new-tool-name">クラゲ マップ</div>
@@ -672,12 +633,13 @@ ruby rt {
     </div>
   </div>
 
+  <!-- いままでにつくったもの -->
   <div class="saved-section">
-    <div class="saved-title">
-      いままで に つくったもの
-    </div>
+    <div class="saved-label">いままでにつくったもの</div>
+    <div class="saved-divider"></div>
     <div id="saved-grid" class="saved-grid"></div>
   </div>
+
 </div>
 
 <!-- ===== EDITOR ===== -->

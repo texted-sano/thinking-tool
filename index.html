@@ -88,10 +88,9 @@ ruby rt {
 .new-tool-card {
   cursor: pointer;
   background: var(--card);
-  border: 1.5px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
-  padding: 28px 16px 22px;
-  text-align: center;
+  padding: 36px 16px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,82 +138,82 @@ ruby rt {
   font-weight: 900;
   letter-spacing: 0.06em;
   color: var(--text);
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 /* 区切り線 */
 .saved-divider {
-  height: 2px;
+  height: 3px;
   background: var(--border);
   margin-bottom: 20px;
 }
 .saved-grid {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 10px;
 }
 .saved-card {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  padding: 14px 4px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
   cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
-  transition: background 0.12s;
-}
-.saved-card:first-child {
-  border-top: 1px solid var(--border);
+  gap: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .saved-card:hover {
-  background: rgba(168,32,32,0.03);
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(168,32,32,0.08);
 }
 .saved-card-thumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
   background: var(--bg);
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 .saved-card-thumb svg {
-  width: 26px;
-  height: 22px;
-  opacity: 0.7;
+  width: 30px;
+  height: 26px;
+  opacity: 1;
 }
 .saved-card-label {
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   color: var(--text);
   flex: 1;
   word-break: break-all;
   line-height: 1.4;
 }
 .saved-card-date {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--sub);
   white-space: nowrap;
   flex-shrink: 0;
 }
 .saved-card-del {
   background: none;
-  border: none;
+  border: 1.5px solid var(--border);
   cursor: pointer;
   color: var(--sub);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   font-family: inherit;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 5px 12px;
+  border-radius: 6px;
   flex-shrink: 0;
-  transition: color 0.12s, background 0.12s;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
 }
 .saved-card-del:hover {
   color: var(--accent);
-  background: rgba(168,32,32,0.06);
+  border-color: var(--accent);
+  background: rgba(168,32,32,0.05);
 }
 .empty-saved {
   font-size: 0.88rem;

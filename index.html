@@ -235,12 +235,27 @@ ruby rt {
   border: 1.5px solid var(--border);
 }
 .modal-close {
-  position: absolute; top: 16px; left: 16px;
-  font-size: 1.1rem; font-weight: 700; background: none; border: none;
-  cursor: pointer; color: var(--text); padding: 4px 8px;
-  border-radius: 6px; transition: background 0.12s;
+  position: absolute; 
+  top: 16px; 
+  right: 16px;
+  background: #ffffff;
+  border: 1.5px solid var(--accent);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  transition: all 0.12s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.modal-close:hover { background: #e0dbd0; }
+.modal-close:hover {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
 .modal-title { font-size: 1.15rem; font-weight: 800; text-align: center; margin-bottom: 26px; }
 .tool-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 .tool-card {
@@ -250,7 +265,7 @@ ruby rt {
 }
 .tool-card:hover { border-color: var(--accent); background: #ddd8cc; }
 .tool-card-icon { height: 76px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-.tool-card-icon svg { opacity: 0.95; } /* 選択モーダルアイコンの不透明度をアップ */
+.tool-card-icon svg { opacity: 0.95; }
 .tool-card-name { font-size: 0.88rem; font-weight: 700; line-height: 1.4; }
 
 /* ===== EDITOR ===== */
@@ -559,7 +574,7 @@ ruby rt {
 <!-- ===== TOOL SELECT MODAL ===== -->
 <div class="modal-overlay" id="tool-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeToolSelect()">✖</button>
+    <button class="modal-close" onclick="closeToolSelect()">とじる</button>
     <div class="modal-title">
       ツール を せんたく してください
     </div>

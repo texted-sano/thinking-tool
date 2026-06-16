@@ -8,17 +8,17 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #f5f2eb;
+  --bg: #f5f5f5;
   --card: #ffffff;
-  --border: #d0c8b8;
-  --accent: #a82020;
-  --node-border: #a8a090;
-  --head-fill: #e3ded5;
-  --text: #2a2520;
-  --sub: #7a7060;
-  --orange: #d35400;
-  --green: #27ae60;
-  --shadow: rgba(42,37,32,0.06);
+  --border: #222222;
+  --accent: #cc0000;
+  --node-border: #555555;
+  --head-fill: #eeeeee;
+  --text: #111111;
+  --sub: #666666;
+  --orange: #cc0000;
+  --green: #111111;
+  --shadow: rgba(0,0,0,0.08);
 }
 
 body {
@@ -45,7 +45,7 @@ ruby rt {
   color: #fff;
 }
 .editor-toolbar rt {
-  color: #dcd5c9;
+  color: #aaaaaa;
 }
 .toolbar-btn:hover rt {
   color: #fff;
@@ -73,12 +73,14 @@ ruby rt {
   margin-bottom: 64px;
 }
 .new-tool-label {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 900;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  text-align: center;
+  letter-spacing: 0.04em;
+  color: var(--text);
   margin-bottom: 20px;
+  padding-left: 14px;
+  border-left: 5px solid var(--accent);
+  line-height: 1.2;
 }
 .new-tool-grid {
   display: grid;
@@ -95,25 +97,12 @@ ruby rt {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s;
   position: relative;
 }
-.new-tool-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  border: 2px solid var(--accent);
-  opacity: 0;
-  transition: opacity 0.15s;
-  pointer-events: none;
-}
 .new-tool-card:hover {
-  background: #fffdf9;
-  border-color: transparent;
-}
-.new-tool-card:hover::after {
-  opacity: 1;
+  border-color: var(--accent);
+  background: #fff0f0;
 }
 .new-tool-icon {
   height: 64px;
@@ -121,8 +110,8 @@ ruby rt {
   align-items: center;
   justify-content: center;
 }
-.new-tool-icon svg { opacity: 0.8; transition: opacity 0.15s; }
-.new-tool-card:hover .new-tool-icon svg { opacity: 1; }
+.new-tool-icon svg { opacity: 0.8; }
+
 .new-tool-name {
   font-size: 0.85rem;
   font-weight: 800;
@@ -134,17 +123,18 @@ ruby rt {
 /* ===== いままでにつくったもの ===== */
 .saved-section { }
 .saved-label {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 900;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--text);
   margin-bottom: 6px;
+  padding-left: 14px;
+  border-left: 5px solid #0055cc;
+  line-height: 1.2;
 }
 /* 区切り線 */
 .saved-divider {
-  height: 3px;
-  background: var(--border);
-  margin-bottom: 20px;
+  display: none;
 }
 .saved-grid {
   display: flex;
@@ -164,8 +154,8 @@ ruby rt {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .saved-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 2px 10px rgba(168,32,32,0.08);
+  border-color: #0055cc;
+  background: #f0f4ff;
 }
 .saved-card-thumb {
   width: 44px;
@@ -213,7 +203,7 @@ ruby rt {
 .saved-card-del:hover {
   color: var(--accent);
   border-color: var(--accent);
-  background: rgba(168,32,32,0.05);
+  background: rgba(204,0,0,0.05);
 }
 .empty-saved {
   font-size: 0.88rem;
@@ -414,7 +404,7 @@ ruby rt {
 }
 .node.selected > .node-body {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(168,32,32,0.22), 0 4px 14px var(--shadow);
+  box-shadow: 0 0 0 3px rgba(204,0,0,0.22), 0 4px 14px var(--shadow);
 }
 .node.type-center .node-body {
   border-radius: 50%;
@@ -437,7 +427,7 @@ ruby rt {
 /* ===== STICKY NOTE (フセン) ===== */
 .node.type-sticky > .node-body {
   border-radius: 0 !important;
-  box-shadow: 3px 6px 12px rgba(42,37,32,0.08) !important;
+  box-shadow: 3px 6px 12px rgba(0,0,0,0.08) !important;
   font-weight: 700;
   position: relative;
 }
@@ -500,7 +490,7 @@ ruby rt {
   align-items: center;
 }
 .tog-btn {
-  border: 1.5px solid #d0c8b8;
+  border: 1.5px solid #cccccc;
   background: #ffffff; 
   color: var(--sub);
   border-radius: 8px;
@@ -515,15 +505,15 @@ ruby rt {
   outline: none;
 }
 .tog-btn:hover {
-  border-color: #2a2520;
+  border-color: #111111;
 }
 .tog-btn.active { 
   background: #ffffff; 
-  color: #2a2520; 
-  border-color: #2a2520; 
+  color: #111111; 
+  border-color: #111111; 
   border-width: 1.5px;
   font-weight: 900; 
-  box-shadow: 0 0 0 2px #2a2520;
+  box-shadow: 0 0 0 2px #111111;
   pointer-events: none; 
 }の重ね押しを無効化 */
 }
@@ -536,32 +526,32 @@ ruby rt {
 }
 
 .tm-textarea {
-  width: 100%; height: 120px; border: 1.5px solid #bbb; border-radius: 9px;
+  width: 100%; height: 120px; border: 1.5px solid #cccccc; border-radius: 9px;
   padding: 10px 12px; font-size: 0.92rem; font-family: inherit; resize: vertical; background: #fff;
 }
 .tm-footer { display: flex; justify-content: space-between; margin-top: 14px; }
 .btn-confirm {
-  background: #2a2520; color: #fff; border: none; border-radius: 9px;
+  background: #111111; color: #fff; border: none; border-radius: 9px;
   padding: 9px 28px; font-size: 0.92rem; font-family: inherit; cursor: pointer; font-weight: 700;
 }
 .btn-cancel {
-  background: #fff; color: #2a2520; border: 1.5px solid #bbb; border-radius: 9px;
+  background: #fff; color: #111111; border: 1.5px solid #cccccc; border-radius: 9px;
   padding: 9px 28px; font-size: 0.92rem; font-family: inherit; cursor: pointer;
 }
 
 /* ===== COLOR PALETTE ===== */
 .color-palette { display: flex; gap: 8px; align-items: center; }
 .palette-btn {
-  width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #bbb;
+  width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #cccccc;
   cursor: pointer; transition: transform 0.1s, border-color 0.1s; outline: none;
 }
 .palette-btn:hover { transform: scale(1.15); }
-.palette-btn.active { border-color: #2a2520; box-shadow: 0 0 0 2px #2a2520; }
+.palette-btn.active { border-color: #111111; box-shadow: 0 0 0 2px #111111; }
 
 /* save toast */
 .save-toast {
   position: fixed; bottom: 20px; right: 20px;
-  background: #2a2520; color: #fff; border-radius: 10px;
+  background: #111111; color: #fff; border-radius: 10px;
   padding: 10px 20px; font-size: 0.88rem; font-weight: 700;
   opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none;
 }
@@ -583,15 +573,15 @@ ruby rt {
       <div class="new-tool-card" onclick="createNew('webbing')">
         <div class="new-tool-icon">
           <svg width="80" height="62" viewBox="0 0 100 76">
-            <circle cx="50" cy="38" r="14" fill="none" stroke="#2a2520" stroke-width="2.5"/>
-            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
-            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
-            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
-            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="2"/>
-            <line x1="36" y1="30" x2="24" y2="9"  stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="64" y1="30" x2="76" y2="9"  stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="36" y1="46" x2="24" y2="67" stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="64" y1="46" x2="76" y2="67" stroke="#7a7060" stroke-width="1.5"/>
+            <circle cx="50" cy="38" r="14" fill="none" stroke="#111111" stroke-width="2.5"/>
+            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="2"/>
+            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="2"/>
+            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="2"/>
+            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="2"/>
+            <line x1="36" y1="30" x2="24" y2="9"  stroke="#111111" stroke-width="1.5"/>
+            <line x1="64" y1="30" x2="76" y2="9"  stroke="#111111" stroke-width="1.5"/>
+            <line x1="36" y1="46" x2="24" y2="67" stroke="#111111" stroke-width="1.5"/>
+            <line x1="64" y1="46" x2="76" y2="67" stroke="#111111" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="new-tool-name">タイヨウ マップ</div>
@@ -600,15 +590,15 @@ ruby rt {
       <div class="new-tool-card" onclick="createNew('mindmap')">
         <div class="new-tool-icon">
           <svg width="80" height="62" viewBox="0 0 100 76">
-            <circle cx="28" cy="38" r="16" fill="none" stroke="#2a2520" stroke-width="2.5"/>
-            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <line x1="44" y1="30" x2="54" y2="12" stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="44" y1="35" x2="54" y2="30" stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="44" y1="41" x2="54" y2="48" stroke="#7a7060" stroke-width="1.5"/>
-            <line x1="44" y1="46" x2="54" y2="66" stroke="#7a7060" stroke-width="1.5"/>
+            <circle cx="28" cy="38" r="16" fill="none" stroke="#111111" stroke-width="2.5"/>
+            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <line x1="44" y1="30" x2="54" y2="12" stroke="#111111" stroke-width="1.5"/>
+            <line x1="44" y1="35" x2="54" y2="30" stroke="#111111" stroke-width="1.5"/>
+            <line x1="44" y1="41" x2="54" y2="48" stroke="#111111" stroke-width="1.5"/>
+            <line x1="44" y1="46" x2="54" y2="66" stroke="#111111" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="new-tool-name">ハリネズミ マップ</div>
@@ -617,13 +607,13 @@ ruby rt {
       <div class="new-tool-card" onclick="createNew('jellyfish')">
         <div class="new-tool-icon">
           <svg width="80" height="62" viewBox="0 0 100 76">
-            <path d="M10,42 Q50,4 90,42" fill="#c4b9a8" stroke="#2a2520" stroke-width="2"/>
-            <line x1="22" y1="42" x2="16" y2="66" stroke="#7a7060" stroke-width="2"/>
-            <line x1="50" y1="42" x2="50" y2="66" stroke="#7a7060" stroke-width="2"/>
-            <line x1="78" y1="42" x2="84" y2="66" stroke="#7a7060" stroke-width="2"/>
-            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
-            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#2a2520" stroke-width="1.8"/>
+            <path d="M10,42 Q50,4 90,42" fill="#dddddd" stroke="#111111" stroke-width="2"/>
+            <line x1="22" y1="42" x2="16" y2="66" stroke="#111111" stroke-width="2"/>
+            <line x1="50" y1="42" x2="50" y2="66" stroke="#111111" stroke-width="2"/>
+            <line x1="78" y1="42" x2="84" y2="66" stroke="#111111" stroke-width="2"/>
+            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
+            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#111111" stroke-width="1.8"/>
           </svg>
         </div>
         <div class="new-tool-name">クラゲ マップ</div>
@@ -736,7 +726,7 @@ const USER_SETTINGS = {
   TOAST_DURATION: 1800,
   LOCAL_STORAGE_KEY: 'thinking_v3_saved',
 
-  PALETTE_TEXT_COLORS: ['#2a2520', '#a82020', '#1a5276', '#196f3d', '#b7950b', '#626567', '#ffffff'],
+  PALETTE_TEXT_COLORS: ['#111111', '#cc0000', '#1a5276', '#196f3d', '#b7950b', '#626567', '#ffffff'],
   PALETTE_BG_COLORS: ['#ffffff', '#fcfaf2', '#fdedec', '#ebf5fb', '#eaf2f8', '#eafaf1', '#fef9e7']
 };
 
@@ -759,16 +749,16 @@ class ThinkingToolApp {
     this.autoSaveTimer = null;
     this.rootNodeIds = new Set();
 
-    this.selectedTextColor = '#2a2520';
+    this.selectedTextColor = '#111111';
     this.selectedBgColor = '#ffffff';
     this.selectedDir = 'yoko'; // 文字方向の一時状態管理
     this.selectedWeight = 'normal'; // 文字の太さの一時状態管理
 
     // ツール別最新スタイル履歴（2個目の新規作成時は初期値に戻る設計）
     this.toolStyles = {
-      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' }
     };
 
     this.init();
@@ -1042,9 +1032,9 @@ class ThinkingToolApp {
     
     // セーブデータから前回のツール用最新スタイルをロード。無い場合はデフォルト値に安全フォールバック
     this.toolStyles    = p.toolStyles || {
-      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' }
     };
 
     this.undoStack = [];
@@ -1082,9 +1072,9 @@ class ThinkingToolApp {
 
     // 2個目の新規作成時は、まっさらな初期状態で崩れなく表示できるよう設定をリセット
     this.toolStyles = {
-      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
-      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' }
     };
 
     this.undoStack = [];
@@ -1145,7 +1135,7 @@ class ThinkingToolApp {
 
     // 現在のツール用の最新お気に入りスタイルを取得（無ければ標準の初期スタイル）
     const style = (this.toolStyles && this.currentTool && this.toolStyles[this.currentTool]) || {
-      fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko'
+      fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko'
     };
 
     const n = {
@@ -1326,7 +1316,7 @@ class ThinkingToolApp {
   applyBodyStyle(el, n) {
     el.style.fontSize   = (n.fontSize || 14) + 'px';
     el.style.fontWeight = n.fontWeight || 'normal';
-    el.style.color      = n.color || '#2a2520';
+    el.style.color      = n.color || '#111111';
     el.style.background = n.bg || '#ffffff';
     if (n.dir === 'tate') el.style.writingMode = 'vertical-rl';
     else el.style.writingMode = 'horizontal-tb';
@@ -1429,7 +1419,7 @@ class ThinkingToolApp {
 
       const visualPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       visualPath.setAttribute('d', d);
-      visualPath.setAttribute('stroke', '#b0a898');
+      visualPath.setAttribute('stroke', '#888888');
       visualPath.setAttribute('stroke-width', '2.5');
       visualPath.setAttribute('fill', 'none');
 
@@ -1799,7 +1789,7 @@ class ThinkingToolApp {
     document.getElementById('node-text-input').value  = n.text || '';
     document.getElementById('font-size-slider').value = n.fontSize || 14;
 
-    this.selectPaletteColor('text', n.color || '#2a2520');
+    this.selectPaletteColor('text', n.color || '#111111');
     this.selectPaletteColor('bg', n.bg || '#ffffff');
 
     // 実際のデータを直接書き換えないよう、一時保存用の状態プロパティに値を非破壊コピー

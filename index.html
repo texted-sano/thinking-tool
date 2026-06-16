@@ -99,7 +99,7 @@ ruby rt {
   font-weight: 700;
 }
 
-/* ノート一覧セクション */
+/* ノート一覧セクション（横長リスト型レイアウト） */
 .saved-section {
   background: var(--card);
   border-radius: 12px;
@@ -118,80 +118,108 @@ ruby rt {
 }
 
 .saved-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-direction: column; /* 1行ずつ下に増やしていくための縦並び設定 */
+  gap: 12px; /* 箇条書きカード間の縦のすき間 */
 }
 .saved-card {
   background: #fdfcf9;
   border: 1.5px solid var(--border);
   border-radius: 8px;
-  padding: 16px;
+  padding: 10px 16px; /* 横長に適した細い内側余白に変更 */
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
+  flex-direction: row; /* 横に並べる設定 */
+  align-items: center; /* 縦方向を中央揃えにする */
+  gap: 16px; /* 各要素間のすき間 */
 }
 .saved-card:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(42,37,32,0.08);
+  transform: translateX(3px); /* 縦揺れではなく、右側にスライドするような上品なアニメーションへ */
+  box-shadow: 0 4px 12px rgba(42,37,32,0.06);
 }
 .saved-card-label {
-  font-size: 0.95rem;
+  font-size: 1.0rem;
   font-weight: 800;
   color: var(--text);
   line-height: 1.4;
   word-break: break-all;
+  flex: 1; /* 名前（タイトル）エリアが伸縮し、日付と削除ボタンを右端に配置します */
 }
 .saved-card-date {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--sub);
-  display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
+  white-space: nowrap; /* 画面幅が狭くても日付が途中で折り返さないようにする */
 }
 .saved-card-thumb {
   background: #f5f2eb;
   border: 1px dashed var(--border);
   border-radius: 6px;
-  height: 80px;
+  width: 48px; /* 横長に合わせてアイコンの枠をコンパクトな正方形に調整 */
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
-  position: relative;
+  flex-shrink: 0; /* アイコンが潰れるのを防止 */
 }
-.saved-card-thumb svg { opacity: 0.28; }
+.saved-card-thumb svg {
+  opacity: 0.85; /* 視認性を上げるために、さらにくっきりと不透明度をアップ */
+  width: 32px;
+  height: 27px;
+}
 
 .saved-card-del {
-  position: absolute;
-  top: 8px;
-  right: 8px;
   background: #ffffff;
   border: 1.5px solid var(--accent);
   border-radius: 6px;
   cursor: pointer;
   color: var(--accent);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 6px 14px; /* 「さくじょ」を押しやすい幅に広げる */
   transition: all 0.12s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0; /* 削除ボタンが潰れるのを防止 */
 }
 .saved-card-del:hover {
   color: #fff;
   background: var(--accent);
   border-color: var(--accent);
 }
-.saved-card-del:hover ruby rt {
-  color: #fff;
-}
 .empty-saved { color: var(--sub); font-size: 0.9rem; padding: 8px 0; }
+
+/* ===== ドラッグソート用スタイル ===== */
+.saved-card-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab; /* 掴めることを示すカーソル */
+  font-size: 1.1rem;
+  color: var(--sub);
+  width: 28px;
+  height: 100%;
+  user-select: none;
+  opacity: 0.5;
+  transition: opacity 0.12s, transform 0.12s;
+}
+.saved-card-drag-handle:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+.saved-card-drag-handle:active {
+  cursor: grabbing; /* 掴み中カーソル */
+}
+
+/* ドラッグ中の要素のビジュアル */
+.saved-card.dragging {
+  opacity: 0.75;
+  background: #fdfcf9;
+  border-color: var(--accent);
+  box-shadow: 0 6px 20px rgba(168,32,32,0.15); /* 浮き上がりを示す影を追加 */
+}
 
 /* ===== TOOL SELECT MODAL ===== */
 .modal-overlay {
@@ -222,7 +250,7 @@ ruby rt {
 }
 .tool-card:hover { border-color: var(--accent); background: #ddd8cc; }
 .tool-card-icon { height: 76px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-.tool-card-icon svg { opacity: 0.65; }
+.tool-card-icon svg { opacity: 0.95; } /* 選択モーダルアイコンの不透明度をアップ */
 .tool-card-name { font-size: 0.88rem; font-weight: 700; line-height: 1.4; }
 
 /* ===== EDITOR ===== */
@@ -267,7 +295,7 @@ ruby rt {
   gap: 6px;
 }
 
-/* ツールバー用ボタン */
+/* ツールバー用ボタン（「おわる」のデザインに統合） */
 .toolbar-btn {
   background: rgba(255,255,255,0.08);
   border: 1.5px solid rgba(255,255,255,0.15);
@@ -277,13 +305,12 @@ ruby rt {
   height: 46px;
   cursor: pointer;
   display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+  align-items: center; /* 縦位置中央揃え */
+  justify-content: center; /* 横位置中央揃え */
   font-family: inherit;
+  font-size: 0.82rem; /* 「おわる」ボタンと同じフォントサイズ */
+  font-weight: 900; /* 「おわる」ボタンと同じ太さ */
   transition: background 0.12s, border-color 0.12s;
-  padding: 2px 0;
 }
 .toolbar-btn:hover {
   background: rgba(255,255,255,0.18);
@@ -292,16 +319,6 @@ ruby rt {
 .toolbar-btn:disabled {
   opacity: 0.25;
   cursor: default;
-}
-.toolbar-btn .btn-symbol {
-  font-size: 0.78rem;
-  line-height: 1;
-  color: #dcd5c9;
-}
-.toolbar-btn .btn-text {
-  font-size: 0.72rem;
-  font-weight: 900;
-  line-height: 1.1;
 }
 
 .close-editor-btn {
@@ -425,19 +442,64 @@ ruby rt {
 .text-modal-overlay.open { display: flex; }
 .text-modal {
   background: #fcfaf6; border-radius: 18px;
-  padding: 26px 22px 20px; width: 520px; max-width: 95vw;
+  padding: 28px 28px 22px; width: 560px; max-width: 95vw;
   box-shadow: 0 8px 40px rgba(0,0,0,0.24);
   border: 1.5px solid var(--border);
 }
-.tm-row { display: flex; align-items: center; margin-bottom: 15px; gap: 10px; }
-.tm-label { font-size: 0.83rem; font-weight: 700; min-width: 88px; line-height: 1.5; }
-.toggle-grp { display: flex; gap: 5px; }
-.tog-btn {
-  border: 1.5px solid #bbb; background: #fff; border-radius: 8px;
-  padding: 6px 16px; cursor: pointer; font-size: 0.83rem; font-family: inherit;
+.tm-row { 
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 18px; 
+  gap: 20px;
 }
-.tog-btn.active { background: #2a2520; color: #fff; border-color: #2a2520; }
-.fsize-slider { flex: 1; accent-color: var(--accent); }
+.tm-label { 
+  font-size: 0.85rem; 
+  font-weight: 800; 
+  width: 120px;
+  flex-shrink: 0; 
+  line-height: 1.5; 
+}
+.toggle-grp { 
+  display: flex; 
+  gap: 8px; 
+  align-items: center;
+}
+.tog-btn {
+  border: 1.5px solid #d0c8b8;
+  background: #ffffff; 
+  color: var(--sub);
+  border-radius: 8px;
+  width: 96px;
+  text-align: center;
+  padding: 6px 0;
+  cursor: pointer; 
+  font-size: 0.83rem; 
+  font-family: inherit;
+  font-weight: 700;
+  transition: all 0.12s ease;
+  outline: none;
+}
+.tog-btn:hover {
+  border-color: #2a2520;
+}
+.tog-btn.active { 
+  background: #ffffff; 
+  color: #2a2520; 
+  border-color: #2a2520; 
+  border-width: 1.5px;
+  font-weight: 900; 
+  box-shadow: 0 0 0 2px #2a2520;
+  pointer-events: none; 
+}の重ね押しを無効化 */
+}
+
+.fsize-slider { 
+  width: 220px;
+  flex-shrink: 0;
+  margin-left: 2px;
+  accent-color: var(--accent); 
+}
+
 .tm-textarea {
   width: 100%; height: 120px; border: 1.5px solid #bbb; border-radius: 9px;
   padding: 10px 12px; font-size: 0.92rem; font-family: inherit; resize: vertical; background: #fff;
@@ -476,19 +538,19 @@ ruby rt {
 <!-- ===== HOME ===== -->
 <div id="home-screen">
   <div class="home-header">
-    <h1 class="home-title"><ruby>情<rt>じょう</rt>報<rt>ほう</rt></ruby><ruby>整<rt>せい</rt>理<rt>り</rt></ruby>ツール</h1>
+    <h1 class="home-title">シンキングツール</h1>
   </div>
   
   <div class="btn-new-wrap">
     <button class="btn-new" onclick="openToolSelect()">
-      <span><ruby>新<rt>あたら</rt></ruby>しく<ruby>作<rt>つく</rt></ruby>る</span>
+      <span>あたらしく つくる</span>
       <span class="btn-new-plus">＋</span>
     </button>
   </div>
 
   <div class="saved-section">
     <div class="saved-title">
-      <ruby>作<rt>さ</rt>業<rt>ぎょう</rt>履<rt>り</rt>歴<rt>れき</rt></ruby>
+      いままで に つくったもの
     </div>
     <div id="saved-grid" class="saved-grid"></div>
   </div>
@@ -499,57 +561,63 @@ ruby rt {
   <div class="modal-box">
     <button class="modal-close" onclick="closeToolSelect()">✕</button>
     <div class="modal-title">
-      <ruby>使<rt>し</rt>用<rt>よう</rt></ruby>するツールを<ruby>選<rt>せん</rt>択<rt>たく</rt></ruby>してください
+      ツール を せんたく してください
     </div>
     <div class="tool-grid">
 
+      <!-- ウェビングマップ（モーダル） -->
       <div class="tool-card" onclick="createNew('webbing')">
         <div class="tool-card-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <circle cx="50" cy="38" r="14" fill="none" stroke="#666" stroke-width="2.5"/>
-            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="2"/>
-            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="2"/>
-            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="2"/>
-            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="2"/>
-            <line x1="36" y1="30" x2="24" y2="9"  stroke="#666" stroke-width="1.5"/>
-            <line x1="64" y1="30" x2="76" y2="9"  stroke="#666" stroke-width="1.5"/>
-            <line x1="36" y1="46" x2="24" y2="67" stroke="#666" stroke-width="1.5"/>
-            <line x1="64" y1="46" x2="76" y2="67" stroke="#666" stroke-width="1.5"/>
+            <!-- 線をより濃くはっきりした#333に変更 -->
+            <circle cx="50" cy="38" r="14" fill="none" stroke="#333" stroke-width="2.5"/>
+            <rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+            <rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+            <rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+            <rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+            <line x1="36" y1="30" x2="24" y2="9"  stroke="#333" stroke-width="1.5"/>
+            <line x1="64" y1="30" x2="76" y2="9"  stroke="#333" stroke-width="1.5"/>
+            <line x1="36" y1="46" x2="24" y2="67" stroke="#333" stroke-width="1.5"/>
+            <line x1="64" y1="46" x2="76" y2="67" stroke="#333" stroke-width="1.5"/>
           </svg>
         </div>
-        <div class="tool-card-name">ウェビングマップ</div>
+        <div class="tool-card-name">タイヨウ マップ</div>
       </div>
 
+      <!-- マインドマップ（モーダル） -->
       <div class="tool-card" onclick="createNew('mindmap')">
         <div class="tool-card-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <circle cx="28" cy="38" r="16" fill="none" stroke="#666" stroke-width="2.5"/>
-            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <line x1="44" y1="30" x2="54" y2="12" stroke="#666" stroke-width="1.5"/>
-            <line x1="44" y1="35" x2="54" y2="30" stroke="#666" stroke-width="1.5"/>
-            <line x1="44" y1="41" x2="54" y2="48" stroke="#666" stroke-width="1.5"/>
-            <line x1="44" y1="46" x2="54" y2="66" stroke="#666" stroke-width="1.5"/>
+            <!-- 線をより濃くはっきりした#333に変更 -->
+            <circle cx="28" cy="38" r="16" fill="none" stroke="#333" stroke-width="2.5"/>
+            <rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <line x1="44" y1="30" x2="54" y2="12" stroke="#333" stroke-width="1.5"/>
+            <line x1="44" y1="35" x2="54" y2="30" stroke="#333" stroke-width="1.5"/>
+            <line x1="44" y1="41" x2="54" y2="48" stroke="#333" stroke-width="1.5"/>
+            <line x1="44" y1="46" x2="54" y2="66" stroke="#333" stroke-width="1.5"/>
           </svg>
         </div>
-        <div class="tool-card-name">マインドマップ</div>
+        <div class="tool-card-name">ハリネズミ マップ</div>
       </div>
 
+      <!-- クラゲチャート（モーダル） -->
       <div class="tool-card" onclick="createNew('jellyfish')">
         <div class="tool-card-icon">
           <svg width="100" height="76" viewBox="0 0 100 76">
-            <path d="M10,42 Q50,4 90,42" fill="#c8c0b0" stroke="#666" stroke-width="2"/>
-            <line x1="22" y1="42" x2="16" y2="66" stroke="#666" stroke-width="2"/>
-            <line x1="50" y1="42" x2="50" y2="66" stroke="#666" stroke-width="2"/>
-            <line x1="78" y1="42" x2="84" y2="66" stroke="#666" stroke-width="2"/>
-            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
-            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#666" stroke-width="1.8"/>
+            <!-- クラゲドームの塗りを濃いアースカラー#8a7e6dに、線を#333に変更 -->
+            <path d="M10,42 Q50,4 90,42" fill="#8a7e6d" stroke="#333" stroke-width="2"/>
+            <line x1="22" y1="42" x2="16" y2="66" stroke="#333" stroke-width="2"/>
+            <line x1="50" y1="42" x2="50" y2="66" stroke="#333" stroke-width="2"/>
+            <line x1="78" y1="42" x2="84" y2="66" stroke="#333" stroke-width="2"/>
+            <rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
+            <rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/>
           </svg>
         </div>
-        <div class="tool-card-name">クラゲチャート</div>
+        <div class="tool-card-name">クラゲ マップ</div>
       </div>
 
     </div>
@@ -566,25 +634,22 @@ ruby rt {
 
     <div class="toolbar-actions">
       <button class="toolbar-btn" id="btn-undo" onclick="undo()" disabled>
-        <span class="btn-text"><ruby>戻<rt>もど</rt></ruby>る</span>
+        <span>もどる</span>
       </button>
       <button class="toolbar-btn" id="btn-redo" onclick="redo()" disabled>
-        <span class="btn-text"><ruby>進<rt>すす</rt></ruby>む</span>
+        <span>すすむ</span>
       </button>
       <button class="toolbar-btn" onclick="changeZoom(+0.15)">
-        <span class="btn-text"><ruby>拡<rt>かく</rt>大<rt>だい</rt></ruby></span>
-      </button>
-      <button class="toolbar-btn" onclick="resetZoom()">
-        <span class="btn-text"><ruby>戻<rt>もど</rt></ruby>す</span>
+        <span>かくだい</span>
       </button>
       <button class="toolbar-btn" onclick="changeZoom(-0.15)">
-        <span class="btn-text"><ruby>縮<rt>しゅく</rt>小<rt>しょう</rt></ruby></span>
+        <span>しゅくしょう</span>
       </button>
       <button class="toolbar-btn" onclick="addStickyNote()">
-        <span class="btn-text"><ruby>付<rt>ふ</rt>箋<rt>せん</rt></ruby></span>
+        <span>ふせん</span>
       </button>
       <button class="toolbar-btn" onclick="manualSave()">
-        <span class="btn-text"><ruby>記<rt>き</rt>録<rt>ろく</rt></ruby></span>
+        <span>きろく</span>
       </button>
     </div>
 
@@ -607,27 +672,27 @@ ruby rt {
     <div class="tm-row">
       <span class="tm-label"><ruby>向<rt>む</rt></ruby>き</span>
       <div class="toggle-grp">
-        <button class="tog-btn" id="dir-tate" onclick="setDir('tate')">たて<ruby>書<rt>が</rt></ruby>き</button>
-        <button class="tog-btn active" id="dir-yoko" onclick="setDir('yoko')">よこ<ruby>書<rt>が</rt></ruby>き</button>
+        <button class="tog-btn" id="dir-tate" onclick="setDir('tate')">たてがき</button>
+        <button class="tog-btn active" id="dir-yoko" onclick="setDir('yoko')">よこがき</button>
       </div>
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>大<rt>おお</rt>きさ</span>
+      <span class="tm-label">もじ の おおきさ</span>
       <input type="range" class="fsize-slider" id="font-size-slider" min="10" max="28" value="14">
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>太<rt>ふと</rt>さ</span>
+      <span class="tm-label">もじ の ふとさ</span>
       <div class="toggle-grp">
         <button class="tog-btn active" id="weight-normal" onclick="setWeight('normal')">ふつう</button>
-        <button class="tog-btn" id="weight-bold" onclick="setWeight('bold')"><ruby>太<rt>ふと</rt>字<rt>じ</rt></ruby></button>
+        <button class="tog-btn" id="weight-bold" onclick="setWeight('bold')">ふとじ</button>
       </div>
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>文<rt>も</rt>字<rt>じ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby></span>
+      <span class="tm-label">もじ の いろ</span>
       <div class="color-palette" id="text-color-palette"></div>
     </div>
     <div class="tm-row">
-      <span class="tm-label"><ruby>背<rt>はい</rt>景<rt>けい</rt></ruby>の<ruby>色<rt>いろ</rt></ruby></span>
+      <span class="tm-label">はいけい の いろ</span>
       <div class="color-palette" id="bg-color-palette"></div>
     </div>
     <textarea class="tm-textarea" id="node-text-input" placeholder="テキストをにゅうりょくしてください"></textarea>
@@ -638,7 +703,7 @@ ruby rt {
   </div>
 </div>
 
-<div class="save-toast" id="save-toast"><ruby>保<rt>ほ</rt>存<rt>ぞん</rt></ruby>しました</div>
+<div class="save-toast" id="save-toast">ほぞんしました</div>
 
 <script>
 // ============================================================
@@ -679,6 +744,15 @@ class ThinkingToolApp {
 
     this.selectedTextColor = '#2a2520';
     this.selectedBgColor = '#ffffff';
+    this.selectedDir = 'yoko'; // 文字方向の一時状態管理
+    this.selectedWeight = 'normal'; // 文字の太さの一時状態管理
+
+    // ツール別最新スタイル履歴（2個目の新規作成時は初期値に戻る設計）
+    this.toolStyles = {
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+    };
 
     this.init();
   }
@@ -688,10 +762,107 @@ class ThinkingToolApp {
     this.renderSaved();
     this.setupGlobalClick();
     this.setupBackgroundPan();
+    this.enableDragSort(); // ドラッグ並び替えの有効化を追加
   }
 
   uid() {
     return 'n' + (this.idCounter++);
+  }
+
+  // ドラッグソート機能（PCマウス & スマホタッチ両対応）
+  enableDragSort() {
+    const grid = document.getElementById('saved-grid');
+    if (!grid) return;
+
+    let dragEl = null;
+    let startY = 0;
+    let isDragging = false; // 実際に並び替え中かどうかのフラグ
+
+    const getMouseY = e => e.touches ? e.touches[0].clientY : e.clientY;
+
+    const onStart = (e, card) => {
+      // 削除ボタンやつまみ以外の通常クリック・タップは完全に無視
+      if (e.target.closest('.saved-card-del')) return;
+      if (!e.target.closest('.saved-card-drag-handle')) return;
+
+      dragEl = card;
+      startY = getMouseY(e);
+      isDragging = false; // まだ並び替え状態にはしない（ダサい点線等の生成もなし）
+
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const onMove = e => {
+      if (!dragEl) return;
+      const y = getMouseY(e);
+
+      // 元のタップした位置からY軸に 5px 以上動いた時点で初めて「並び替えドラッグ開始」と判定
+      if (!isDragging && Math.abs(y - startY) > 5) {
+        isDragging = true;
+        dragEl.classList.add('dragging'); // 浮き上がるクラスを適用
+      }
+
+      if (!isDragging) return; // 5px未満なら何も実行しない（クリックによる誤動作防止）
+
+      // 自分以外の非ドラッグ中カードをリスト化
+      const siblings = [...grid.querySelectorAll('.saved-card:not(.dragging)')];
+      
+      // 現在のポインタY座標に近い挿入先（他のカードの中央ライン）を検出
+      const nextSibling = siblings.find(sibling => {
+        const rect = sibling.getBoundingClientRect();
+        return y < rect.top + rect.height / 2;
+      });
+
+      // 点線枠を使わず、直接リアルタイムにカード位置をぬるぬると差し替える
+      grid.insertBefore(dragEl, nextSibling);
+    };
+
+    const onEnd = () => {
+      if (!dragEl) return;
+
+      if (isDragging) {
+        dragEl.classList.remove('dragging');
+        this.saveNewOrder(); // 順番が入れ替わった結果をブラウザに自動保存
+      }
+
+      dragEl = null;
+      isDragging = false;
+    };
+
+    // 親コンテナ（#saved-grid）でのイベント一括管理
+    grid.addEventListener('mousedown', e => {
+      const card = e.target.closest('.saved-card');
+      if (card) onStart(e, card);
+    });
+    grid.addEventListener('touchstart', e => {
+      const card = e.target.closest('.saved-card');
+      if (card) onStart(e, card);
+    }, { passive: false });
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: false });
+
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchend', onEnd);
+  }
+
+  // ドラッグ後のDOMの並び順に合わせて、ストレージ内のデータ順を並び替えて更新
+  saveNewOrder() {
+    const grid = document.getElementById('saved-grid');
+    const cards = [...grid.querySelectorAll('.saved-card')];
+    const newIds = cards.map(c => c.getAttribute('data-id'));
+
+    const arr = this.getSaved();
+    const sortedArr = [];
+
+    // DOMの並び順（上から下）の順番通りにデータを配列化
+    newIds.forEach(id => {
+      const item = arr.find(p => p.id === id);
+      if (item) sortedArr.push(item);
+    });
+
+    // 読み込み時に.reverse()される設計と整合性を取るため、逆順にしてセーブ
+    this.setSaved(sortedArr.reverse());
   }
 
   // ============================================================
@@ -759,7 +930,8 @@ class ThinkingToolApp {
       nodes: this.nodes,
       edges: this.edges,
       idCounter: this.idCounter,
-      roots: [...this.rootNodeIds]
+      roots: [...this.rootNodeIds],
+      toolStyles: this.toolStyles // 各ツール用の最新設定を保存
     };
     if (idx >= 0) arr[idx] = proj;
     else arr.push(proj);
@@ -799,7 +971,7 @@ class ThinkingToolApp {
   }
 
   // ============================================================
-  // HOME PORTAL RENDER
+  // HOME PORTAL RENDER（横長箇条書き型リスト表示）
   // ============================================================
   renderSaved() {
     const grid = document.getElementById('saved-grid');
@@ -809,13 +981,20 @@ class ThinkingToolApp {
       return;
     }
     grid.innerHTML = arr.map(p => `
-      <div class="saved-card" onclick="loadProject('${p.id}')">
-        <div class="saved-card-label">${this.esc(p.title)}</div>
-        <div class="saved-card-date">${this.esc(p.date)}<ruby>更<rt>こう</rt>新<rt>しん</rt></ruby></div>
+      <!-- 並び順のスキャン用に data-id を付与 -->
+      <div class="saved-card" onclick="loadProject('${p.id}')" data-id="${p.id}">
+        <!-- 0. ドラッグ用つまみ（カードクリックが誤動作しないようにイベント伝播を防止） -->
+        <div class="saved-card-drag-handle" onclick="event.stopPropagation()">☰</div>
+        <!-- 1. ツールアイコン -->
         <div class="saved-card-thumb">
           ${this.thumbIcon(p.tool)}
-          <button class="saved-card-del" onclick="event.stopPropagation();deleteProject('${p.id}')"><ruby>削<rt>さく</rt>除<rt>じょ</rt></ruby></button>
         </div>
+        <!-- 2. 名前 -->
+        <div class="saved-card-label">${this.esc(p.title)}</div>
+        <!-- 3. 更新日時 -->
+        <div class="saved-card-date">${this.esc(p.date)}</div>
+        <!-- 4. 削除ボタン -->
+        <button class="saved-card-del" onclick="event.stopPropagation();deleteProject('${p.id}')">さくじょ</button>
       </div>`).join('');
   }
 
@@ -825,9 +1004,10 @@ class ThinkingToolApp {
 
   thumbIcon(t) {
     const map = {
-      webbing:   `<svg width="60" height="50"><circle cx="30" cy="22" r="9" fill="none" stroke="#aaa" stroke-width="2"/><rect x="2" y="34" width="14" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="23" y="34" width="14" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="44" y="34" width="14" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><line x1="9" y1="34" x2="22" y2="31" stroke="#aaa" stroke-width="1.2"/><line x1="30" y1="31" x2="30" y2="34" stroke="#aaa" stroke-width="1.2"/><line x1="51" y1="34" x2="38" y2="31" stroke="#aaa" stroke-width="1.2"/></svg>`,
-      mindmap:   `<svg width="60" height="50"><circle cx="16" cy="25" r="9" fill="none" stroke="#aaa" stroke-width="2"/><rect x="32" y="5"  width="24" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="32" y="18" width="24" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="32" y="31" width="24" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><line x1="25" y1="20" x2="32" y2="9"  stroke="#aaa" stroke-width="1.2"/><line x1="25" y1="25" x2="32" y2="22" stroke="#aaa" stroke-width="1.2"/><line x1="25" y1="30" x2="32" y2="35" stroke="#aaa" stroke-width="1.2"/></svg>`,
-      jellyfish: `<svg width="60" height="50"><path d="M6,26 Q30,6 54,26" fill="#bbb" stroke="#999" stroke-width="1.5"/><line x1="14" y1="26" x2="10" y2="42" stroke="#aaa" stroke-width="1.5"/><line x1="30" y1="26" x2="30" y2="42" stroke="#aaa" stroke-width="1.5"/><line x1="46" y1="26" x2="50" y2="42" stroke="#aaa" stroke-width="1.5"/><rect x="2"  y="40" width="16" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="22" y="40" width="16" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/><rect x="42" y="40" width="16" height="9" rx="2" fill="none" stroke="#aaa" stroke-width="1.5"/></svg>`,
+      // 境界線を #555 や #444、塗りを #888 にすることで、コントラストをはっきりと濃く調整
+      webbing:   `<svg width="100%" height="100%" viewBox="0 0 60 50"><circle cx="30" cy="22" r="9" fill="none" stroke="#555" stroke-width="2"/><rect x="2" y="34" width="14" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="23" y="34" width="14" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="44" y="34" width="14" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><line x1="9" y1="34" x2="22" y2="31" stroke="#555" stroke-width="1.2"/><line x1="30" y1="31" x2="30" y2="34" stroke="#555" stroke-width="1.2"/><line x1="51" y1="34" x2="38" y2="31" stroke="#555" stroke-width="1.2"/></svg>`,
+      mindmap:   `<svg width="100%" height="100%" viewBox="0 0 60 50"><circle cx="16" cy="25" r="9" fill="none" stroke="#555" stroke-width="2"/><rect x="32" y="5"  width="24" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="32" y="18" width="24" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="32" y="31" width="24" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><line x1="25" y1="20" x2="32" y2="9"  stroke="#555" stroke-width="1.2"/><line x1="25" y1="25" x2="32" y2="22" stroke="#555" stroke-width="1.2"/><line x1="25" y1="30" x2="32" y2="35" stroke="#555" stroke-width="1.2"/></svg>`,
+      jellyfish: `<svg width="100%" height="100%" viewBox="0 0 60 50"><path d="M6,26 Q30,6 54,26" fill="#888" stroke="#444" stroke-width="1.5"/><line x1="14" y1="26" x2="10" y2="42" stroke="#555" stroke-width="1.5"/><line x1="30" y1="26" x2="30" y2="42" stroke="#555" stroke-width="1.5"/><line x1="46" y1="26" x2="50" y2="42" stroke="#555" stroke-width="1.5"/><rect x="2"  y="40" width="16" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="22" y="40" width="16" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/><rect x="42" y="40" width="16" height="9" rx="2" fill="none" stroke="#555" stroke-width="1.5"/></svg>`,
     };
     return map[t] || '';
   }
@@ -841,6 +1021,14 @@ class ThinkingToolApp {
     this.edges         = p.edges;
     this.idCounter     = p.idCounter || 100;
     this.rootNodeIds   = new Set(p.roots || []);
+    
+    // セーブデータから前回のツール用最新スタイルをロード。無い場合はデフォルト値に安全フォールバック
+    this.toolStyles    = p.toolStyles || {
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+    };
+
     this.undoStack = [];
     this.redoStack = [];
     document.getElementById('editor-title').value = p.title || '無題';
@@ -874,6 +1062,14 @@ class ThinkingToolApp {
     this.edges = [];
     this.idCounter = 1;
     this.rootNodeIds = new Set();
+
+    // 2個目の新規作成時は、まっさらな初期状態で崩れなく表示できるよう設定をリセット
+    this.toolStyles = {
+      webbing: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      mindmap: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' },
+      jellyfish: { fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko' }
+    };
+
     this.undoStack = [];
     this.redoStack = [];
     document.getElementById('editor-title').value = this.toolLabel(tool);
@@ -886,7 +1082,7 @@ class ThinkingToolApp {
   }
 
   toolLabel(t) {
-    return { webbing: 'ウェビングマップ', mindmap: 'マインドマップ', jellyfish: 'クラゲチャート' }[t] || t;
+    return { webbing: 'タイヨウ マップ', mindmap: 'ハリネズミ マップ', jellyfish: 'クラゲ マップ' }[t] || t;
   }
 
   // ============================================================
@@ -929,10 +1125,19 @@ class ThinkingToolApp {
   mk(x, y, text, type) {
     const defaultWidth = type === 'jellyfish-dome' ? 220 : (type === 'center' ? 120 : 150);
     const defaultHeight = type === 'center' ? 120 : 48;
+
+    // 現在のツール用の最新お気に入りスタイルを取得（無ければ標準の初期スタイル）
+    const style = (this.toolStyles && this.currentTool && this.toolStyles[this.currentTool]) || {
+      fontSize: 14, fontWeight: 'normal', color: '#2a2520', bg: '#ffffff', dir: 'yoko'
+    };
+
     const n = {
       id: this.uid(), x, y, text, type,
-      fontSize: 14, fontWeight: 'normal',
-      color: '#2a2520', bg: '#ffffff', dir: 'yoko',
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      color: style.color,
+      bg: style.bg,
+      dir: style.dir,
       width: defaultWidth,
       height: defaultHeight
     };
@@ -1325,7 +1530,7 @@ class ThinkingToolApp {
     });
   }
 
-addStickyNote() {
+  addStickyNote() {
     this.snapshot();
     const wrap = document.getElementById('canvas-wrap');
     const scrollLeft = wrap ? wrap.scrollLeft : 0;
@@ -1580,8 +1785,13 @@ addStickyNote() {
     this.selectPaletteColor('text', n.color || '#2a2520');
     this.selectPaletteColor('bg', n.bg || '#ffffff');
 
-    this.setDir(n.dir || 'yoko');
-    this.setWeight(n.fontWeight || 'normal');
+    // 実際のデータを直接書き換えないよう、一時保存用の状態プロパティに値を非破壊コピー
+    this.selectedDir = n.dir || 'yoko';
+    this.selectedWeight = n.fontWeight || 'normal';
+
+    this.updateDirUI(this.selectedDir);
+    this.updateWeightUI(this.selectedWeight);
+
     document.getElementById('text-modal').classList.add('open');
     setTimeout(() => document.getElementById('node-text-input').focus(), 80);
   }
@@ -1592,8 +1802,29 @@ addStickyNote() {
     this.snapshot();
     n.text       = document.getElementById('node-text-input').value;
     n.fontSize   = parseInt(document.getElementById('font-size-slider').value);
-    n.color = this.selectedTextColor;
-    n.bg    = this.selectedBgColor;
+    n.color      = this.selectedTextColor;
+    n.bg         = this.selectedBgColor;
+    n.fontWeight = this.selectedWeight; // 決定時に文字の太さを適用
+
+    // 決定時に文字の向きが変わっていた場合のみ、縦横幅を入れ替える
+    if (n.dir !== this.selectedDir) {
+      const temp = n.width;
+      n.width = n.height;
+      n.height = temp;
+      n.dir = this.selectedDir;
+    }
+
+    // 適用した最新のスタイルを、現在のツール用履歴に引き継ぎ保存
+    if (this.currentTool && this.toolStyles) {
+      this.toolStyles[this.currentTool] = {
+        fontSize: n.fontSize,
+        fontWeight: n.fontWeight,
+        color: n.color,
+        bg: n.bg,
+        dir: n.dir
+      };
+    }
+
     this.cancelNodeText();
     const old = document.getElementById('node-' + n.id);
     if (old) { old.replaceWith(this.makeNodeEl(n)); }
@@ -1606,6 +1837,11 @@ addStickyNote() {
   }
 
   setDir(d) {
+    this.selectedDir = d;
+    this.updateDirUI(d);
+  }
+
+  updateDirUI(d) {
     document.getElementById('dir-tate').classList.toggle('active', d === 'tate');
     document.getElementById('dir-yoko').classList.toggle('active', d === 'yoko');
 
@@ -1617,21 +1853,16 @@ addStickyNote() {
       ta.style.writingMode = 'horizontal-tb';
       ta.style.height = '120px';
     }
-
-    const n = this.nodes.find(x => x.id === this.editingId);
-    if (n && n.dir !== d) {
-      const temp = n.width;
-      n.width = n.height;
-      n.height = temp;
-      n.dir = d;
-    }
   }
 
   setWeight(w) {
+    this.selectedWeight = w;
+    this.updateWeightUI(w);
+  }
+
+  updateWeightUI(w) {
     document.getElementById('weight-normal').classList.toggle('active', w === 'normal');
     document.getElementById('weight-bold').classList.toggle('active', w === 'bold');
-    const n = this.nodes.find(x => x.id === this.editingId);
-    if (n) n.fontWeight = w;
   }
 
   // ============================================================
@@ -1689,9 +1920,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.setWeight = (w) => app.setWeight(w);
   window.selectPaletteColor = (type, color) => app.selectPaletteColor(type, color);
   window.scheduleAutoSave = () => app.scheduleAutoSave();
-  window.closeEditor = () => app.closeEditor();
-  window.addStickyNote = () => app.addStickyNote(); // 追加
-  window.confirmNodeText = () => app.confirmNodeText();
+  window.addStickyNote = () => app.addStickyNote();
 });
 </script>
 </body>

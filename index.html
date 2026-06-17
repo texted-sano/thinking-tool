@@ -570,11 +570,11 @@ ruby rt {
 <!-- ===== HOME ===== -->
 <div id="home-screen">
 
-  <h1 class="home-title">シンキングツール</h1>
+  <h1 class="home-title">情報整理ツール</h1>
 
   <!-- あたらしくつくる -->
   <div class="new-tool-section">
-    <div class="new-tool-label">あたらしくつくる</div>
+    <div class="new-tool-label">新しく作る</div>
     <div class="new-tool-grid">
 
       <div class="new-tool-card" onclick="createNew('webbing')">
@@ -631,7 +631,7 @@ ruby rt {
 
   <!-- いままでにつくったもの -->
   <div class="saved-section">
-    <div class="saved-label">いままでにつくったもの</div>
+    <div class="saved-label">今までにつくったもの</div>
     <div class="saved-divider"></div>
     <div id="saved-grid" class="saved-grid"></div>
   </div>
@@ -648,26 +648,26 @@ ruby rt {
 
     <div class="toolbar-actions">
       <button class="toolbar-btn" id="btn-undo" onclick="undo()" disabled>
-        <span>もどる</span>
+        <span>戻る</span>
       </button>
       <button class="toolbar-btn" id="btn-redo" onclick="redo()" disabled>
-        <span>すすむ</span>
+        <span>進む</span>
       </button>
       <button class="toolbar-btn" onclick="changeZoom(+0.15)">
-        <span>かくだい</span>
+        <span>拡大</span>
       </button>
       <button class="toolbar-btn" onclick="changeZoom(-0.15)">
-        <span>しゅくしょう</span>
+        <span>縮小</span>
       </button>
       <button class="toolbar-btn" onclick="addStickyNote()">
-        <span>ふせん</span>
+        <span>フセン</span>
       </button>
       <button class="toolbar-btn" onclick="manualSave()">
-        <span>きろく</span>
+        <span>保存</span>
       </button>
     </div>
 
-    <button class="close-editor-btn" onclick="closeEditor()">おわる</button>
+    <button class="close-editor-btn" onclick="closeEditor()">とじる</button>
   </div>
 
   <div class="canvas-wrap" id="canvas-wrap">
@@ -682,40 +682,40 @@ ruby rt {
 <div class="text-modal-overlay" id="text-modal">
   <div class="text-modal">
     <div class="tm-row">
-      <span class="tm-label"><ruby>向<rt>む</rt></ruby>き</span>
+      <span class="tm-label">向き</span>
       <div class="toggle-grp">
-        <button class="tog-btn" id="dir-tate" onclick="setDir('tate')">たてがき</button>
-        <button class="tog-btn active" id="dir-yoko" onclick="setDir('yoko')">よこがき</button>
+        <button class="tog-btn" id="dir-tate" onclick="setDir('tate')">たて書き</button>
+        <button class="tog-btn active" id="dir-yoko" onclick="setDir('yoko')">よこ書き</button>
       </div>
     </div>
     <div class="tm-row">
-      <span class="tm-label">もじ の おおきさ</span>
+      <span class="tm-label">文字の大きさ</span>
       <input type="range" class="fsize-slider" id="font-size-slider" min="10" max="28" value="14">
     </div>
     <div class="tm-row">
-      <span class="tm-label">もじ の ふとさ</span>
+      <span class="tm-label">文字の太さ</span>
       <div class="toggle-grp">
-        <button class="tog-btn active" id="weight-normal" onclick="setWeight('normal')">ふつう</button>
-        <button class="tog-btn" id="weight-bold" onclick="setWeight('bold')">ふとじ</button>
+        <button class="tog-btn active" id="weight-normal" onclick="setWeight('normal')">細字</button>
+        <button class="tog-btn" id="weight-bold" onclick="setWeight('bold')">太字</button>
       </div>
     </div>
     <div class="tm-row">
-      <span class="tm-label">もじ の いろ</span>
+      <span class="tm-label">文字の色</span>
       <div class="color-palette" id="text-color-palette"></div>
     </div>
     <div class="tm-row">
-      <span class="tm-label">はいけい の いろ</span>
+      <span class="tm-label">背景の色</span>
       <div class="color-palette" id="bg-color-palette"></div>
     </div>
-    <textarea class="tm-textarea" id="node-text-input" placeholder="テキストをにゅうりょくしてください"></textarea>
+    <textarea class="tm-textarea" id="node-text-input" placeholder=""></textarea>
     <div class="tm-footer">
-      <button class="btn-confirm" onclick="confirmNodeText()">けってい</button>
+      <button class="btn-confirm" onclick="confirmNodeText()">決定</button>
       <button class="btn-cancel"  onclick="cancelNodeText()">やめる</button>
     </div>
   </div>
 </div>
 
-<div class="save-toast" id="save-toast">ほぞんしました</div>
+<div class="save-toast" id="save-toast">保存しました</div>
 
 <script>
 // ============================================================
@@ -1302,7 +1302,7 @@ class ThinkingToolApp {
 
     const delBtn = document.createElement('button');
     delBtn.className = 'node-act-btn btn-del-node';
-    delBtn.innerHTML = '<ruby>削<rt>さく</rt>除<rt>じょ</rt></ruby>';
+    delBtn.innerHTML = '削除';
     const isRoot = this.rootNodeIds.has(n.id);
     if (isRoot) delBtn.classList.add('hidden');
     else delBtn.onclick = e => { e.stopPropagation(); this.deleteNode(n.id); };

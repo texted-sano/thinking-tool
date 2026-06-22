@@ -58,7 +58,6 @@ ruby rt {
   padding: 56px 32px 64px;
 }
 
-/* タイトル */
 .home-title {
   font-size: 2rem;
   font-weight: 900;
@@ -133,7 +132,6 @@ ruby rt {
   border-left: 5px solid #0055cc;
   line-height: 1.2;
 }
-/* 区切り線 */
 .saved-divider {
   display: none;
 }
@@ -214,7 +212,6 @@ ruby rt {
   text-align: center;
 }
 
-/* ドラッグハンドル */
 .saved-card-drag-handle {
   display: flex;
   align-items: center;
@@ -288,7 +285,6 @@ ruby rt {
 }
 #editor-screen.open { display: flex; }
 
-/* 上部ツールバー */
 .editor-toolbar {
   background: #352e28;
   color: #fff;
@@ -322,7 +318,6 @@ ruby rt {
   gap: 6px;
 }
 
-/* ツールバー用ボタン（「おわる」のデザインに統合） */
 .toolbar-btn {
   background: rgba(255,255,255,0.08);
   border: 1.5px solid rgba(255,255,255,0.15);
@@ -332,11 +327,11 @@ ruby rt {
   height: 46px;
   cursor: pointer;
   display: inline-flex;
-  align-items: center; /* 縦位置中央揃え */
-  justify-content: center; /* 横位置中央揃え */
+  align-items: center;
+  justify-content: center;
   font-family: inherit;
-  font-size: 0.82rem; /* 「おわる」ボタンと同じフォントサイズ */
-  font-weight: 900; /* 「おわる」ボタンと同じ太さ */
+  font-size: 0.82rem;
+  font-weight: 900;
   transition: background 0.12s, border-color 0.12s;
 }
 .toolbar-btn:hover {
@@ -521,7 +516,7 @@ ruby rt {
   border-width: 1.5px;
   font-weight: 900; 
   box-shadow: 0 0 0 2px #111111;
-  pointer-events: none; /* ボタンの重ね押しを無効化 */
+  pointer-events: none;
 }
 
 .fsize-slider { 
@@ -755,10 +750,9 @@ class ThinkingToolApp {
 
     this.selectedTextColor = '#111111';
     this.selectedBgColor = '#ffffff';
-    this.selectedDir = 'yoko'; // 文字方向の一時状態管理
-    this.selectedWeight = 'normal'; // 文字の太さの一時状態管理
+    this.selectedDir = 'yoko';
+    this.selectedWeight = 'normal';
 
-    // ツール別最新スタイル履歴（2個目の新規作成時は初期値に戻る設計）
     this.toolStyles = {
       webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
       mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
@@ -773,32 +767,30 @@ class ThinkingToolApp {
     this.renderSaved();
     this.setupGlobalClick();
     this.setupBackgroundPan();
-    this.enableDragSort(); // ドラッグ並び替えの有効化を追加
+    this.enableDragSort();
   }
 
   uid() {
     return 'n' + (this.idCounter++);
   }
 
-  // ドラッグソート機能（PCマウス & スマホタッチ両対応）
   enableDragSort() {
     const grid = document.getElementById('saved-grid');
     if (!grid) return;
 
     let dragEl = null;
     let startY = 0;
-    let isDragging = false; // 実際に並び替え中かどうかのフラグ
+    let isDragging = false;
 
     const getMouseY = e => e.touches ? e.touches[0].clientY : e.clientY;
 
     const onStart = (e, card) => {
-      // 削除ボタンやつまみ以外の通常クリック・タップは完全に無視
       if (e.target.closest('.saved-card-del')) return;
       if (!e.target.closest('.saved-card-drag-handle')) return;
 
       dragEl = card;
       startY = getMouseY(e);
-      isDragging = false; // まだ並び替え状態にはしない（ダサい点線等の生成もなし）
+      isDragging = false;
 
       if (e.cancelable) e.preventDefault();
     };
@@ -807,24 +799,20 @@ class ThinkingToolApp {
       if (!dragEl) return;
       const y = getMouseY(e);
 
-      // 元のタップした位置からY軸に 5px 以上動いた時点で初めて「並び替えドラッグ開始」と判定
       if (!isDragging && Math.abs(y - startY) > 5) {
         isDragging = true;
-        dragEl.classList.add('dragging'); // 浮き上がるクラスを適用
+        dragEl.classList.add('dragging');
       }
 
-      if (!isDragging) return; // 5px未満なら何も実行しない（クリックによる誤動作防止）
+      if (!isDragging) return;
 
-      // 自分以外の非ドラッグ中カードをリスト化
       const siblings = [...grid.querySelectorAll('.saved-card:not(.dragging)')];
       
-      // 現在のポインタY座標に近い挿入先（他のカードの中央ライン）を検出
       const nextSibling = siblings.find(sibling => {
         const rect = sibling.getBoundingClientRect();
         return y < rect.top + rect.height / 2;
       });
 
-      // 点線枠を使わず、直接リアルタイムにカード位置をぬるぬると差し替える
       grid.insertBefore(dragEl, nextSibling);
     };
 
@@ -833,14 +821,13 @@ class ThinkingToolApp {
 
       if (isDragging) {
         dragEl.classList.remove('dragging');
-        this.saveNewOrder(); // 順番が入れ替わった結果をブラウザに自動保存
+        this.saveNewOrder();
       }
 
       dragEl = null;
       isDragging = false;
     };
 
-    // 親コンテナ（#saved-grid）でのイベント一括管理
     grid.addEventListener('mousedown', e => {
       const card = e.target.closest('.saved-card');
       if (card) onStart(e, card);
@@ -857,7 +844,6 @@ class ThinkingToolApp {
     document.addEventListener('touchend', onEnd);
   }
 
-  // ドラッグ後のDOMの並び順に合わせて、ストレージ内のデータ順を並び替えて更新
   saveNewOrder() {
     const grid = document.getElementById('saved-grid');
     const cards = [...grid.querySelectorAll('.saved-card')];
@@ -866,13 +852,11 @@ class ThinkingToolApp {
     const arr = this.getSaved();
     const sortedArr = [];
 
-    // DOMの並び順（上から下）の順番通りにデータを配列化
     newIds.forEach(id => {
       const item = arr.find(p => p.id === id);
       if (item) sortedArr.push(item);
     });
 
-    // 読み込み時に.reverse()される設計と整合性を取るため、逆順にしてセーブ
     this.setSaved(sortedArr.reverse());
   }
 
@@ -942,7 +926,7 @@ class ThinkingToolApp {
       edges: this.edges,
       idCounter: this.idCounter,
       roots: [...this.rootNodeIds],
-      toolStyles: this.toolStyles // 各ツール用の最新設定を保存
+      toolStyles: this.toolStyles
     };
     if (idx >= 0) arr[idx] = proj;
     else arr.push(proj);
@@ -982,7 +966,7 @@ class ThinkingToolApp {
   }
 
   // ============================================================
-  // HOME PORTAL RENDER（横長箇条書き型リスト表示）
+  // HOME PORTAL RENDER
   // ============================================================
   renderSaved() {
     const grid = document.getElementById('saved-grid');
@@ -1015,8 +999,6 @@ class ThinkingToolApp {
 
   thumbIcon(t) {
     const map = {
-      // ツール選択画面（ホーム）の美しいSVGコードと100%同一に統一
-      // width/heightを100%に設定して、作業履歴の48pxミニ四角枠内にアスペクト比を保って自動ジャストフィットさせます
       webbing:   `<svg width="100%" height="100%" viewBox="0 0 100 76"><circle cx="50" cy="38" r="14" fill="none" stroke="#333" stroke-width="2.5"/><rect x="2"  y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/><rect x="76" y="2"  width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/><rect x="2"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/><rect x="76" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="2"/><line x1="36" y1="30" x2="24" y2="9"  stroke="#333" stroke-width="1.5"/><line x1="64" y1="30" x2="76" y2="9"  stroke="#333" stroke-width="1.5"/><line x1="36" y1="46" x2="24" y2="67" stroke="#333" stroke-width="1.5"/><line x1="64" y1="46" x2="76" y2="67" stroke="#333" stroke-width="1.5"/></svg>`,
       mindmap:   `<svg width="100%" height="100%" viewBox="0 0 100 76"><circle cx="28" cy="38" r="16" fill="none" stroke="#333" stroke-width="2.5"/><rect x="54" y="6"  width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><rect x="54" y="24" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><rect x="54" y="42" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><rect x="54" y="60" width="38" height="13" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><line x1="44" y1="30" x2="54" y2="12" stroke="#333" stroke-width="1.5"/><line x1="44" y1="35" x2="54" y2="30" stroke="#333" stroke-width="1.5"/><line x1="44" y1="41" x2="54" y2="48" stroke="#333" stroke-width="1.5"/><line x1="44" y1="46" x2="54" y2="66" stroke="#333" stroke-width="1.5"/></svg>`,
       jellyfish: `<svg width="100%" height="100%" viewBox="0 0 100 76"><path d="M10,42 Q50,4 90,42" fill="#8a7e6d" stroke="#333" stroke-width="2"/><line x1="22" y1="42" x2="16" y2="66" stroke="#333" stroke-width="2"/><line x1="50" y1="42" x2="50" y2="66" stroke="#333" stroke-width="2"/><line x1="78" y1="42" x2="84" y2="66" stroke="#333" stroke-width="2"/><rect x="4"  y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><rect x="39" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/><rect x="74" y="60" width="22" height="14" rx="4" fill="none" stroke="#333" stroke-width="1.8"/></svg>`,
@@ -1034,7 +1016,6 @@ class ThinkingToolApp {
     this.idCounter     = p.idCounter || 100;
     this.rootNodeIds   = new Set(p.roots || []);
     
-    // セーブデータから前回のツール用最新スタイルをロード。無い場合はデフォルト値に安全フォールバック
     this.toolStyles    = p.toolStyles || {
       webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
       mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
@@ -1074,7 +1055,6 @@ class ThinkingToolApp {
     this.idCounter = 1;
     this.rootNodeIds = new Set();
 
-    // 2個目の新規作成時は、まっさらな初期状態で崩れなく表示できるよう設定をリセット
     this.toolStyles = {
       webbing: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
       mindmap: { fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko' },
@@ -1137,7 +1117,6 @@ class ThinkingToolApp {
     const defaultWidth = type === 'jellyfish-dome' ? 220 : (type === 'center' ? 120 : 150);
     const defaultHeight = type === 'center' ? 120 : 48;
 
-    // 現在のツール用の最新お気に入りスタイルを取得（無ければ標準の初期スタイル）
     const style = (this.toolStyles && this.currentTool && this.toolStyles[this.currentTool]) || {
       fontSize: 14, fontWeight: 'normal', color: '#111111', bg: '#ffffff', dir: 'yoko'
     };
@@ -1796,7 +1775,6 @@ class ThinkingToolApp {
     this.selectPaletteColor('text', n.color || '#111111');
     this.selectPaletteColor('bg', n.bg || '#ffffff');
 
-    // 実際のデータを直接書き換えないよう、一時保存用の状態プロパティに値を非破壊コピー
     this.selectedDir = n.dir || 'yoko';
     this.selectedWeight = n.fontWeight || 'normal';
 
@@ -1815,9 +1793,8 @@ class ThinkingToolApp {
     n.fontSize   = parseInt(document.getElementById('font-size-slider').value);
     n.color      = this.selectedTextColor;
     n.bg         = this.selectedBgColor;
-    n.fontWeight = this.selectedWeight; // 決定時に文字の太さを適用
+    n.fontWeight = this.selectedWeight;
 
-    // 決定時に文字の向きが変わっていた場合のみ、縦横幅を入れ替える
     if (n.dir !== this.selectedDir) {
       const temp = n.width;
       n.width = n.height;
@@ -1825,7 +1802,6 @@ class ThinkingToolApp {
       n.dir = this.selectedDir;
     }
 
-    // 適用した最新のスタイルを、現在のツール用履歴に引き継ぎ保存
     if (this.currentTool && this.toolStyles) {
       this.toolStyles[this.currentTool] = {
         fontSize: n.fontSize,
